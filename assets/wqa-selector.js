@@ -33,7 +33,8 @@
   }
 
   /**
-   * 保守折线：0→Qn 关阀偏高至铭牌点；Qn→Qmax 扬程下降至末端比例（strict 用 0.46，放宽档略低）
+   * 保守折线：Q≤Qn 段关阀至铭牌；Q>Qn 至 Qmax 段用 **t^1.35** 凸曲线下降（刚过 Qn 时扬程下降更缓），
+   * 避免把「流量略高于铭牌」的可用点误判为未盖住；末端仍收至 Hn×hEndRatio。
    */
   function headOnCurve(Qn, Hn, Qd, Qmax, hEndRatio) {
     if (!isFinite(Qn) || Qn <= 0 || !isFinite(Hn) || Hn <= 0) return 0;
@@ -49,7 +50,12 @@
     var hEnd = Hn * hEndRatio;
     var span = Qmax - Qn;
     if (span <= 1e-6) return Hn;
-    return Hn + (hEnd - Hn) * ((Qd - Qn) / span);
+    var t = (Qd - Qn) / span;
+    if (t < 0) t = 0;
+    if (t > 1) return -1;
+    /** 凸曲线：刚过 Qn 时扬程下降较缓，避免把「Q 略高于铭牌」的可用点误判为未盖住（如 200WQA550-32-75 与 600,30） */
+    var curveT = Math.pow(t, 1.35);
+    return Hn + (hEnd - Hn) * curveT;
   }
 
   function getWqaRows() {
@@ -286,7 +292,7 @@
       return a.p.Q * a.p.H - b.p.Q * b.p.H;
     });
 
-    var maxShow = 32;
+    var maxShow = 48;
     var slice = candidates.slice(0, maxShow);
 
     var hint = "";
@@ -361,7 +367,7 @@
       "</tr></thead><tbody>" +
       rows +
       "</tbody></table></div>" +
-      "<p class=\"wqa-footnote\">排序：<strong>先比铭牌 kW（低者优先）</strong>，再比贴合度。H<sub>包络</sub>@Qd 为保守折线（含接近额定流量段的抬高近似）；Q<sub>max</sub>估 ≈ Qn×(1.35+30/(Qn+20))。扬程裕量 = H<sub>包络</sub>−H<sub>需求</sub>。</p>";
+      "<p class=\"wqa-footnote\">排序：<strong>先比铭牌 kW（低者优先）</strong>，再比贴合度。H<sub>包络</sub> 在 Q&gt;Qn 段为<strong>凸曲线</strong>下降（较线性更贴近真实曲线形态）。Q<sub>max</sub>估 ≈ Qn×(1.35+30/(Qn+20))。</p>";
 
     outEl.querySelectorAll(".link-model").forEach(function (btn) {
       btn.addEventListener("click", function () {

@@ -775,6 +775,50 @@
     }
 
 
+    .catalog-lang-block {
+      margin-top: 44px;
+      padding-top: 36px;
+      border-top: 1px solid rgba(15, 23, 42, 0.08);
+    }
+    .catalog-lang-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .catalog-lang-card {
+      background: white;
+      border-radius: 14px;
+      border: 1px solid rgba(15, 23, 42, 0.07);
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: box-shadow 0.3s, border-color 0.2s;
+    }
+    .catalog-lang-card:hover {
+      box-shadow: var(--shadow-soft);
+      border-color: rgba(13, 125, 242, 0.2);
+    }
+    .catalog-lang-card .lang {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--bg-deep);
+      font-family: var(--font-display);
+    }
+    .catalog-lang-card .file {
+      font-size: 12px;
+      color: var(--text-muted);
+      word-break: break-word;
+      line-height: 1.45;
+    }
+    .catalog-lang-card a {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: auto;
+    }
+
     /* Ocean showcase + compact product tabs */
     .product-showcase-grid {
       display: grid;
@@ -1813,6 +1857,50 @@
               </div>
             </div>
           </article>
+        </div>
+
+        <div class="catalog-lang-block">
+          <div class="mini-head" style="margin-bottom:8px;">
+            <div class="eyebrow">WQA 260302 · Global PDFs</div>
+            <h3 style="margin:0 0 8px;font-size:22px;color:var(--bg-deep);">《西子潜水排污泵系列 260302》多语言下载</h3>
+            <p style="margin:0;font-size:14px;color:var(--text-muted);max-width:900px;line-height:1.65;">
+              以下为各国客户常用语种预留的<strong>独立下载链接</strong>。当前文件为<strong>中文版 PDF 的副本</strong>（版式与页码与《西子潜水排污泵系列 260302》一致），便于先上线链接；收到正式翻译排版稿后，请用<strong>同名文件</strong>替换 <code>西子泵业资料/i18n-wqa-260302/</code> 目录中对应 PDF 即可，无需再改网页。
+              另可参考仓库中已有英文样本（不同修订号）：<a href="西子泵业资料/Xizi%20Submersible%20Sewage%20Pump%20Series%20251203.pdf" target="_blank" rel="noopener">Xizi Submersible Sewage Pump Series 251203.pdf</a>。
+              说明文档：<a href="西子泵业资料/i18n-wqa-260302/README.txt" target="_blank" rel="noopener">README.txt</a>
+            </p>
+          </div>
+          <div class="catalog-lang-grid">
+            <div class="catalog-lang-card">
+              <div class="lang">简体中文（原版）</div>
+              <div class="file">西子潜水排污泵系列 260302.pdf</div>
+              <a href="西子泵业资料/西子潜水排污泵系列%20260302.pdf" target="_blank" rel="noopener">打开 PDF</a>
+            </div>
+            <div class="catalog-lang-card">
+              <div class="lang">English</div>
+              <div class="file">Xizi-WQA-submersible-sewage-pump-series-260302-en.pdf</div>
+              <a href="西子泵业资料/i18n-wqa-260302/Xizi-WQA-submersible-sewage-pump-series-260302-en.pdf" target="_blank" rel="noopener">Download PDF</a>
+            </div>
+            <div class="catalog-lang-card">
+              <div class="lang">Русский</div>
+              <div class="file">Xizi-WQA-submersible-sewage-pump-series-260302-ru.pdf</div>
+              <a href="西子泵业资料/i18n-wqa-260302/Xizi-WQA-submersible-sewage-pump-series-260302-ru.pdf" target="_blank" rel="noopener">Скачать PDF</a>
+            </div>
+            <div class="catalog-lang-card">
+              <div class="lang">Español</div>
+              <div class="file">Xizi-WQA-submersible-sewage-pump-series-260302-es.pdf</div>
+              <a href="西子泵业资料/i18n-wqa-260302/Xizi-WQA-submersible-sewage-pump-series-260302-es.pdf" target="_blank" rel="noopener">Descargar PDF</a>
+            </div>
+            <div class="catalog-lang-card">
+              <div class="lang">日本語</div>
+              <div class="file">Xizi-WQA-submersible-sewage-pump-series-260302-ja.pdf</div>
+              <a href="西子泵业资料/i18n-wqa-260302/Xizi-WQA-submersible-sewage-pump-series-260302-ja.pdf" target="_blank" rel="noopener">PDF を開く</a>
+            </div>
+            <div class="catalog-lang-card">
+              <div class="lang">繁體中文（台灣用語）</div>
+              <div class="file">Xizi-WQA-submersible-sewage-pump-series-260302-zh-Hant.pdf</div>
+              <a href="西子泵业资料/i18n-wqa-260302/Xizi-WQA-submersible-sewage-pump-series-260302-zh-Hant.pdf" target="_blank" rel="noopener">開啟 PDF</a>
+            </div>
+          </div>
         </div>
       </div>
 
