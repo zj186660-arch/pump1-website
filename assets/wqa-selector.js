@@ -1,7 +1,8 @@
 /**
- * WQA 选型（启发式）：基于《价格表》中全部 WQA 型号的铭牌 Q-H-P，
- * 结合《西子潜水排污泵系列 260302》P23–P27 曲线图的工程含义（工况点在曲线下方为可用）
- * 用简化「能力包络 + 贴合度」排序；**最终以样本曲线与销售复核为准**。
+ * WQA 选型：在缺少数字化曲线时，用铭牌 Qn、Hn 构造**保守** Q–H 折线包络，
+ * 要求工况 (Qd,Hd) 落在包络「下方」（Hd ≤ 包络在 Qd 处的扬程），且 Qd 不得超过包络在横轴上的有效范围
+ *（禁止把曲线外推超过合理延伸）。排序优先「刚好盖住、裕量适中」，其次才是明显大裕量机型。
+ * 最终以《西子潜水排污泵系列 260302》P23–P27 原图与销售复核为准。
  */
 (function () {
   "use strict";
@@ -20,6 +21,33 @@
     "10": 250,
     "12": 300
   };
+
+  /** 铭牌流量外，曲线在横轴上允许延伸的上限系数（小流量档延伸比例略大，大流量档更保守，避免 100WQA60 盖住 120） */
+  function flowSpanFactor(Qn) {
+    if (!isFinite(Qn) || Qn <= 0) return 1.2;
+    return 1.35 + 30 / (Qn + 20);
+  }
+
+  function maxFlowOnCurve(Qn) {
+    return Qn * flowSpanFactor(Qn);
+  }
+
+  /**
+   * 保守折线：0→Qn 关阀偏高至铭牌点；Qn→Qmax 扬程下降至末端比例（strict 用 0.46，放宽档略低）
+   */
+  function headOnCurve(Qn, Hn, Qd, Qmax, hEndRatio) {
+    if (!isFinite(Qn) || Qn <= 0 || !isFinite(Hn) || Hn <= 0) return 0;
+    if (!isFinite(Qd) || Qd < 0) return Hn * 1.35;
+    if (Qd > Qmax) return -1;
+    var hShut = Hn * 1.32;
+    if (Qd <= Qn) {
+      return hShut + (Hn - hShut) * (Qd / Qn);
+    }
+    var hEnd = Hn * hEndRatio;
+    var span = Qmax - Qn;
+    if (span <= 1e-6) return Hn;
+    return Hn + (hEnd - Hn) * ((Qd - Qn) / span);
+  }
 
   function getWqaRows() {
     var d = window.__XIZI_PRICE_DATA__ || {};
@@ -95,7 +123,6 @@
     return v;
   }
 
-  /** 口径过滤：DN80/100 联合图时 80 与 100 互通 */
   function dnMatchesFilter(pumpDn, filterDn) {
     if (filterDn == null) return true;
     if (pumpDn === filterDn) return true;
@@ -103,39 +130,100 @@
     return false;
   }
 
-  /**
-   * 贴合度：铭牌能力 (Qn*Hn) 与需求 (Qc*Hc) 的比值接近 1.05~1.35 为佳；
-   * 同时允许略低于 1 的边界候选（靠近曲线尾端），由销售筛除。
-   */
-  function scoreCandidate(p, Qc, Hc, Pc) {
-    var needQ = Qc != null && Qc > 0;
-    var needH = Hc != null && Hc > 0;
+  function evaluateCover(p, Qd, Hc, Pc, relax) {
+    var hasQ = Qd != null && Qd > 0;
+    var hasH = Hc != null && Hc > 0;
+    var hasP = Pc != null && Pc > 0;
+
+    if (hasP && p.P + 1e-6 < Pc * 0.97) {
+      return { ok: false, reason: "铭牌功率低于需求" };
+    }
+
+    if (!hasQ && !hasH) {
+      if (!hasP) return { ok: false, reason: "—" };
+      return {
+        ok: true,
+        tier: 1,
+        hAt: null,
+        qMax: null,
+        headMargin: null,
+        flowMargin: null,
+        tightScore: Math.abs(Math.log((p.P + 0.4) / (Pc + 0.4)))
+      };
+    }
+
+    if (hasQ && !hasH) {
+      var qMax0 = maxFlowOnCurve(p.Q);
+      if (Qd > qMax0 + 1e-6) {
+        return { ok: false, reason: "需求流量超出曲线合理延伸" };
+      }
+      return {
+        ok: true,
+        tier: 1,
+        hAt: null,
+        qMax: qMax0,
+        headMargin: null,
+        flowMargin: qMax0 - Qd,
+        tightScore: (qMax0 - Qd) / Math.max(Qd, 1)
+      };
+    }
+
+    if (!hasQ && hasH) {
+      if (Hc > p.H * 1.28 + 1e-6) return { ok: false, reason: "需求扬程高于铭牌关阀近似上限" };
+      return {
+        ok: true,
+        tier: 1,
+        hAt: p.H * 1.28,
+        qMax: maxFlowOnCurve(p.Q),
+        headMargin: p.H * 1.28 - Hc,
+        flowMargin: null,
+        tightScore: (p.H * 1.28 - Hc) / Math.max(Hc, 0.5)
+      };
+    }
+
+    var qMax = maxFlowOnCurve(p.Q);
+    if (Qd > qMax + 1e-6) {
+      return { ok: false, reason: "Qd 超出该型号曲线横轴合理范围" };
+    }
+
+    var hEnd = relax ? 0.38 : 0.46;
+    var hAt = headOnCurve(p.Q, p.H, Qd, qMax, hEnd);
+    if (hAt < 0 || !isFinite(hAt)) return { ok: false, reason: "包络计算异常" };
+
+    var eps = relax ? 0.06 : 0.02;
+    if (Hc > hAt + eps) {
+      return { ok: false, reason: "工况点在保守包络之上（未盖住）" };
+    }
+
+    var headMargin = hAt - Hc;
+    var flowMargin = qMax - Qd;
     var cap = p.Q * p.H;
-    var need = (needQ ? Qc : p.Q) * (needH ? Hc : p.H);
-    if (needQ && needH) {
-      if (cap < need * 0.55) return { ok: false, reason: "能力包络偏低" };
-    } else if (needQ && p.Q < Qc * 0.88) return { ok: false, reason: "流量裕量不足" };
-    else if (needH && p.H < Hc * 0.88) return { ok: false, reason: "扬程裕量不足" };
+    var need = Qd * Hc;
+    var oversize = cap / Math.max(need, 1e-6);
+    var tightScore =
+      (headMargin / Math.max(Hc, 0.5)) * 1.15 +
+      (flowMargin / Math.max(Qd, 0.5)) * 0.55 +
+      Math.max(0, Math.log(oversize / 1.35)) * 0.85 +
+      (p.P - (Pc || 0)) * 0.08;
 
-    if (Pc != null && Pc > 0 && p.P < Pc * 0.82) return { ok: false, reason: "电机功率偏小" };
-
-    var ratio = need > 0 ? cap / need : 1;
-    var fit = Math.abs(Math.log(Math.max(ratio, 0.35)));
-    var tailPenalty = 0;
-    if (needQ && needH && ratio < 0.92) tailPenalty += 0.35;
-    if (needQ && needH && ratio > 2.2) tailPenalty += 0.25;
-    if (needQ && p.Q < Qc * 1.02) tailPenalty += 0.08;
-    if (needH && p.H < Hc * 1.02) tailPenalty += 0.08;
-
-    return { ok: true, score: fit + tailPenalty, ratio: ratio };
+    return {
+      ok: true,
+      tier: relax ? 2 : 1,
+      hAt: hAt,
+      qMax: qMax,
+      headMargin: headMargin,
+      flowMargin: flowMargin,
+      tightScore: tightScore,
+      oversize: oversize
+    };
   }
 
   function curvePageHint(dn) {
-    if (dn === 65) return "对照《西子潜水排污泵系列 260302》约 **P23**（DN65，50Hz WQA 曲线）";
-    if (dn === 80 || dn === 100) return "对照该样本约 **P24–P25**（DN80 / DN100 同页多曲线，请结合图例区分）";
-    if (dn === 50) return "对照该样本 **DN50** 附近页（与 2″ 口径一致）";
-    if (dn === 150) return "对照该样本 **DN150** 章节页";
-    return "对照《西子潜水排污泵系列 260302》**WQA 50Hz 性能曲线**章节（P23–P27 一带，以当期印刷版为准）";
+    if (dn === 65) return "对照《西子潜水排污泵系列 260302》约 <strong>P23</strong>（DN65，50Hz WQA）";
+    if (dn === 80 || dn === 100) return "对照该样本约 <strong>P24–P25</strong>（DN80 / DN100）";
+    if (dn === 50) return "对照该样本 <strong>DN50</strong> 页（2″）";
+    if (dn === 150) return "对照该样本 <strong>DN150</strong> 章节";
+    return "对照《西子潜水排污泵系列 260302》<strong>WQA 50Hz</strong> 曲线章节（P23–P27 一带）";
   }
 
   function runSelection() {
@@ -170,44 +258,70 @@
       return;
     }
 
-    var candidates = [];
-    cat.forEach(function (p) {
-      if (!dnMatchesFilter(p.dn, dnFilter)) return;
-      var sc = scoreCandidate(p, Qc, Hc, Pc);
-      if (!sc.ok) return;
-      candidates.push({ p: p, score: sc.score, ratio: sc.ratio });
-    });
+    function collect(relax) {
+      var out = [];
+      cat.forEach(function (p) {
+        if (!dnMatchesFilter(p.dn, dnFilter)) return;
+        var ev = evaluateCover(p, hasQ ? Qc : null, hasH ? Hc : null, hasP ? Pc : null, relax);
+        if (!ev.ok) return;
+        out.push({ p: p, ev: ev, relax: relax });
+      });
+      return out;
+    }
+
+    var tier1 = collect(false);
+    var tier2 = tier1.length ? [] : collect(true);
+    var candidates = tier1.length ? tier1 : tier2;
+    var usedRelax = !tier1.length && tier2.length > 0;
 
     candidates.sort(function (a, b) {
-      return a.score - b.score;
+      if (a.ev.tier !== b.ev.tier) return a.ev.tier - b.ev.tier;
+      var sa = a.ev.tightScore != null ? a.ev.tightScore : 99;
+      var sb = b.ev.tightScore != null ? b.ev.tightScore : 99;
+      if (Math.abs(sa - sb) > 1e-6) return sa - sb;
+      if (a.p.P !== b.p.P) return a.p.P - b.p.P;
+      return a.p.Q * a.p.H - b.p.Q * b.p.H;
     });
 
-    var maxShow = 28;
+    var maxShow = 32;
     var slice = candidates.slice(0, maxShow);
 
     var hint = "";
     if (dnFilter) hint += "<p><strong>口径提示：</strong>" + curvePageHint(dnFilter) + "</p>";
     hint +=
-      "<p class=\"hint\" style=\"margin-top:8px;\">以下为<strong>启发式排序</strong>：优先列出「能力裕量适中」的型号；" +
-      "若工况点须严格落在某条曲线之下，请以《西子潜水排污泵系列 260302》<strong>P23–P27</strong> 原图复核，并在销售指导下定案。" +
-      "后续 WQE 等系列可用同一套思路扩展。</p>";
+      "<p class=\"wqa-select-note\">算法用铭牌 Qn、Hn 构造<strong>保守折线包络</strong>判断「是否盖住」工况点，并优先<strong>裕量适中</strong>的型号；" +
+      "若出现「无严格盖住」则会自动放宽末端下降（仍不外推超过 Qn×延伸系数）。<strong>定标请以样本曲线为准。</strong></p>";
+    if (usedRelax) {
+      hint +=
+        "<p class=\"wqa-select-warn\"><strong>提示：</strong>严格包络下无候选，已启用<strong>放宽末端</strong>档；请优先人工对照 P23–P27。</p>";
+    }
 
     if (!slice.length) {
-      outEl.innerHTML = hint + "<p><strong>无匹配候选</strong>，请放宽口径或检查流量/扬程单位。</p>";
+      outEl.innerHTML =
+        hint +
+        "<p><strong>无匹配候选</strong>：在不外推曲线的前提下，没有型号能盖住该工况。请增大口径系列、或核对流量/扬程单位。</p>";
       return;
+    }
+
+    function fmt(x) {
+      if (x == null || !isFinite(x)) return "—";
+      return (Math.round(x * 100) / 100).toFixed(2);
     }
 
     var rows = slice
       .map(function (c, i) {
         var p = c.p;
+        var ev = c.ev;
         var tag =
           i === 0
-            ? "<span style=\"color:#0d7df2;font-weight:700;\">优先参考</span>"
-            : c.ratio >= 0.92 && c.ratio <= 1.45
-            ? "较贴合"
-            : c.ratio < 0.92
-            ? "裕量偏紧（复核曲线尾端）"
-            : "裕量偏大（注意是否过剩）";
+            ? "<span class=\"wqa-tag wqa-tag--best\">优先参考</span>"
+            : ev.tier === 2
+            ? "<span class=\"wqa-tag wqa-tag--warn\">放宽末端</span>"
+            : ev.oversize != null && ev.oversize <= 1.55
+            ? "<span class=\"wqa-tag\">较贴切</span>"
+            : ev.oversize != null && ev.oversize > 2.2
+            ? "<span class=\"wqa-tag wqa-tag--muted\">裕量偏大</span>"
+            : "<span class=\"wqa-tag\">可用</span>";
         return (
           "<tr><td>" +
           (i + 1) +
@@ -224,7 +338,11 @@
           "</td><td>" +
           p.P +
           "</td><td>" +
-          (c.ratio ? c.ratio.toFixed(2) : "—") +
+          fmt(ev.hAt) +
+          "</td><td>" +
+          fmt(ev.qMax) +
+          "</td><td>" +
+          fmt(ev.headMargin) +
           "</td><td>" +
           tag +
           "</td></tr>"
@@ -234,11 +352,13 @@
 
     outEl.innerHTML =
       hint +
-      "<div style=\"overflow-x:auto;margin-top:12px;\"><table class=\"decode-table\"><thead><tr>" +
-      "<th>#</th><th>型号</th><th>口径</th><th>Qn m³/h</th><th>Hn m</th><th>kW</th><th>能力比*</th><th>说明</th></tr></thead><tbody>" +
+      "<div class=\"wqa-table-wrap\"><table class=\"decode-table wqa-result-table\"><thead><tr>" +
+      "<th>#</th><th>型号</th><th>口径</th><th>Qn</th><th>Hn</th><th>kW</th>" +
+      "<th>H<sub>包络</sub>@Qd</th><th>Q<sub>max</sub>估</th><th>扬程裕量</th><th>说明</th>" +
+      "</tr></thead><tbody>" +
       rows +
       "</tbody></table></div>" +
-      "<p style=\"font-size:12px;color:#5b6678;margin-top:8px;\">*能力比 ≈ (Qn×Hn)/(Qc×Hc)，无 Q 或 H 输入时该列仅供参考。</p>";
+      "<p class=\"wqa-footnote\">H<sub>包络</sub>@Qd：保守折线在需求流量处的扬程；Q<sub>max</sub>估 ≈ Qn×(1.35+30/(Qn+20))。扬程裕量 = H<sub>包络</sub>−H<sub>需求</sub>。</p>";
 
     outEl.querySelectorAll(".link-model").forEach(function (btn) {
       btn.addEventListener("click", function () {

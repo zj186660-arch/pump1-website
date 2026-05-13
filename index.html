@@ -27,6 +27,10 @@
       --shadow-soft: 0 20px 50px rgba(15, 23, 42, 0.08);
       --radius: 16px;
       --max: 1180px;
+      --phi: 1.6180339887;
+      --space-y: clamp(72px, 10.5vh, 120px);
+      --ink-display: #050f1c;
+      --surface-elevated: linear-gradient(165deg, #ffffff 0%, #f7f9fd 100%);
       --header-h: 72px;
       --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
       --font-display: "Outfit", "Noto Sans SC", system-ui, sans-serif;
@@ -192,7 +196,7 @@
       font-weight: 700;
       font-size: 18px;
       letter-spacing: 0.04em;
-      color: var(--bg-deep);
+      color: var(--ink-display);
     }
     .brand-text .en {
       font-family: "DM Sans", sans-serif;
@@ -629,7 +633,7 @@
     .app-grid .reveal:nth-child(5) { transition-delay: 0.23s; }
     .app-grid .reveal:nth-child(6) { transition-delay: 0.28s; }
     section {
-      padding: 96px 24px;
+      padding: var(--space-y) max(24px, calc((100vw - var(--max)) / (2 * var(--phi))));
       position: relative;
     }
     section.alt {
@@ -647,14 +651,17 @@
     .section-head h2 {
       margin: 0;
       font-size: clamp(28px, 3.4vw, 38px);
-      color: var(--bg-deep);
-      letter-spacing: -0.02em;
+      color: var(--ink-display);
+      letter-spacing: -0.028em;
       font-weight: 700;
+      line-height: 1.12;
     }
     .section-head p {
-      margin: 8px 0 0;
+      margin: 10px 0 0;
       color: var(--text-muted);
-      max-width: 520px;
+      max-width: min(38rem, calc(var(--max) / var(--phi) + 2rem));
+      font-size: 15px;
+      line-height: 1.72;
     }
     .eyebrow {
       font-family: var(--font-display);
@@ -839,14 +846,111 @@
       .quote-layout { grid-template-columns: 1fr; }
     }
     .quote-panel {
-      background: white;
-      border-radius: var(--radius);
-      border: 1px solid rgba(15, 23, 42, 0.06);
-      padding: 28px;
-      box-shadow: var(--shadow-soft);
+      background: var(--surface-elevated);
+      border-radius: calc(var(--radius) + 4px);
+      border: 1px solid rgba(15, 23, 42, 0.07);
+      padding: calc(18px * var(--phi));
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.75) inset,
+        0 22px 50px rgba(4, 13, 24, 0.07);
     }
     .quote-panel h3 { margin: 0 0 8px; font-size: 18px; color: var(--bg-deep); }
     .quote-panel > .hint { margin: 0 0 18px; font-size: 13px; color: var(--text-muted); }
+
+    section.flow-suite {
+      position: relative;
+    }
+    section#select-wqa {
+      background:
+        radial-gradient(ellipse 100% 70% at 100% -10%, rgba(13, 125, 242, 0.11), transparent 52%),
+        radial-gradient(ellipse 80% 60% at 0% 110%, rgba(232, 184, 74, 0.08), transparent 48%),
+        linear-gradient(180deg, #fbfcff 0%, #eef3fb 55%, #f5f7fb 100%);
+    }
+    section#select-wqa::before {
+      content: "";
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      top: 0;
+      height: 2px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, transparent, rgba(13, 125, 242, 0.35) 35%, rgba(232, 184, 74, 0.45) 50%, rgba(13, 125, 242, 0.35) 65%, transparent);
+      opacity: 0.85;
+    }
+    section#select-wqa .eyebrow {
+      color: #0a5cad;
+    }
+    section#quote.flow-suite {
+      background: linear-gradient(180deg, #f3f6fb 0%, var(--bg-soft) 45%, #eef2f8 100%);
+    }
+    section#select-wqa .section-head,
+    section#quote.flow-suite .section-head {
+      margin-bottom: clamp(40px, 5vw, 56px);
+    }
+    .wqa-select-note {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin: 0 0 12px;
+    }
+    .wqa-select-warn {
+      font-size: 13px;
+      color: #9a3412;
+      background: rgba(254, 243, 199, 0.65);
+      border: 1px solid rgba(251, 191, 36, 0.45);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin: 0 0 14px;
+    }
+    .wqa-table-wrap {
+      overflow-x: auto;
+      margin-top: 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      background: rgba(255, 255, 255, 0.65);
+    }
+    .wqa-result-table {
+      margin-top: 0;
+      font-size: 13px;
+    }
+    .wqa-result-table th,
+    .wqa-result-table td {
+      white-space: nowrap;
+    }
+    .wqa-result-table th:nth-child(7),
+    .wqa-result-table th:nth-child(8),
+    .wqa-result-table th:nth-child(9) {
+      white-space: normal;
+      max-width: 5.5rem;
+      line-height: 1.25;
+    }
+    .wqa-footnote {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 10px;
+      line-height: 1.65;
+    }
+    .wqa-tag {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(13, 125, 242, 0.1);
+      color: var(--accent-deep);
+    }
+    .wqa-tag--best {
+      background: linear-gradient(120deg, rgba(13, 125, 242, 0.18), rgba(45, 212, 191, 0.14));
+      color: #044089;
+    }
+    .wqa-tag--warn {
+      background: rgba(251, 191, 36, 0.25);
+      color: #92400e;
+    }
+    .wqa-tag--muted {
+      background: rgba(15, 23, 42, 0.06);
+      color: var(--text-muted);
+    }
     .quote-input-wrap { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
     .quote-input-wrap input {
       flex: 1;
@@ -1294,6 +1398,7 @@
         <a href="#contact">联系我们</a>
       </nav>
       <div class="header-actions">
+        <a class="btn btn-ghost" href="#select-wqa">水泵选型</a>
         <a class="btn btn-ghost" href="#quote">型号报价</a>
         <a class="btn btn-primary" href="mailto:jason.zhang@xizipumps.com?subject=西子泵业%20-%20项目咨询">商务咨询</a>
         <button type="button" class="menu-toggle" aria-label="打开菜单" aria-expanded="false" id="menuToggle">
@@ -1344,10 +1449,10 @@
             以工程化交付能力与全生命周期服务理念，对标国际一线品牌的产品定义与项目规范。
           </p>
           <div class="hero-cta">
-            <a class="btn btn-primary" href="#products">浏览产品与系统</a>
-            <a class="btn btn-ghost" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.28);color:white;" href="#quote">型号解析</a>
+            <a class="btn btn-primary" href="#select-wqa">水泵选型</a>
+            <a class="btn btn-ghost" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.28);color:white;" href="#products">产品与系统</a>
+            <a class="btn btn-ghost" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.22);color:rgba(255,255,255,0.95);" href="#quote">型号报价</a>
             <a class="btn btn-ghost" style="background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.92);" href="#contact">联系顾问</a>
-          </div>
         </div>
         <div class="hero-panel">
           <h3>工程级交付指标（典型范围，可项目定制）</h3>
@@ -1527,7 +1632,7 @@
               <p>
                 <strong>型号示例（西子口径）：</strong><code style="background:#f0f4fa;padding:2px 8px;border-radius:6px;font-size:13px;">150WQA150-21-15-4P-Z</code>
                 — 依次为排出口径（mm）、系列代号（如 WQA）、额定流量（m³/h）、额定扬程（m）、电机功率（kW）、电机极数（如 4P）、安装方式代号（Z 为自动耦合式等）。
-                可在下方 <a href="#quote">「型号报价」</a> 中实时解析并生成询价摘要。
+                可先 <a href="#select-wqa">WQA 选型</a>，再在 <a href="#quote">「型号报价」</a> 中解析并生成询价摘要。
               </p>
               <p>
                 典型配套：不锈钢导杆自动耦合装置、出水弯管、双导轨起吊系统；控制侧支持直接启动、星三角、软启动与变频器。
@@ -1718,13 +1823,70 @@
       </div>
     </section>
 
-    <section class="alt" id="quote">
+    <section id="select-wqa" class="flow-suite">
+      <div class="section-head container reveal">
+        <div>
+          <div class="eyebrow">Selector · WQA 50Hz</div>
+          <h2>潜水排污泵 WQA 选型助手</h2>
+          <p>
+            对照《西子潜水排污泵系列 260302》<strong>P23–P27</strong> 中 50Hz WQA 性能曲线：工况点落在曲线<strong>下方</strong>表示该条曲线可满足需求。
+            本页用铭牌 Q、H 与<strong>保守包络折线</strong>判断工况点是否被曲线「盖住」，并优先推荐<strong>裕量适中、贴近工况</strong>的型号（不外推超过合理流量延伸）。<strong>最终以样本原图与销售复核为准</strong>。选中型号可一键填入下方「型号报价」。
+          </p>
+        </div>
+      </div>
+      <div class="container quote-layout">
+        <div class="quote-panel reveal">
+          <h3>工况输入</h3>
+          <p class="hint">口径可填 <strong>DN65</strong>、<strong>65</strong>、<strong>2.5英寸</strong> 或 <strong>2.5"</strong>（英寸与 DN 对照已内置，如 2″=DN50）。功率支持 <strong>kW</strong> 或 <strong>hp</strong>（1 hp = 0.746 kW）。流量支持多种单位并换算为 m³/h。</p>
+          <div class="quote-controls">
+            <div class="quote-row">
+              <span class="label">排出口径</span>
+              <input type="text" id="selOutlet" placeholder="如 DN65 / 2英寸 / 留空" style="flex:1;max-width:240px;">
+            </div>
+            <div class="quote-row">
+              <span class="label">流量</span>
+              <input type="number" id="selQ" min="0" step="any" placeholder="可选" style="width:120px;">
+              <select id="selQUnit">
+                <option value="m3h" selected>m³/h</option>
+                <option value="ls">L/s</option>
+                <option value="lmin">L/min</option>
+                <option value="m3min">m³/min</option>
+                <option value="m3s">m³/s</option>
+                <option value="gpm">US gpm</option>
+              </select>
+            </div>
+            <div class="quote-row">
+              <span class="label">扬程 (m)</span>
+              <input type="number" id="selH" min="0" step="any" placeholder="可选" style="width:120px;">
+            </div>
+            <div class="quote-row">
+              <span class="label">电机功率</span>
+              <input type="number" id="selP" min="0" step="any" placeholder="可选" style="width:120px;">
+              <select id="selPUnit">
+                <option value="kw" selected>kW</option>
+                <option value="hp">hp</option>
+              </select>
+            </div>
+            <div class="quote-row">
+              <button type="button" class="btn btn-primary" id="wqaSelectRun">筛选候选型号</button>
+            </div>
+          </div>
+        </div>
+        <div class="quote-panel reveal reveal-delay-1">
+          <h3>候选列表</h3>
+          <p class="hint">结果按<strong>盖住工况 + 贴切度</strong>排序（扬程裕量、流量延伸余量、功率与铭牌能力综合）；无严格盖住时再尝试略放宽末端。点击型号可在「型号报价」中试算。</p>
+          <div id="wqaSelectResults" class="hint" style="white-space:normal;">请填写至少扬程或流量之一后点击「筛选」。</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="alt flow-suite" id="quote">
       <div class="section-head container reveal">
         <div>
           <div class="eyebrow">Live quote · 面价 ×0.55</div>
           <h2>型号解析与实时报价</h2>
           <p>
-            面价数据由《价格表2026.3定稿》<strong>WQA 系列</strong>表格自动抽取（约 300+ 行）；规则按您提供的公式：
+            建议先在上一节完成 <strong>WQA 初选</strong>，再于此处解析型号并试算价格。面价数据由《价格表2026.3定稿》<strong>WQA 系列</strong>表格自动抽取（约 300+ 行）；规则按您提供的公式：
             水泵实际价 = 面价×0.55，叠加轴承 / 电缆 / 全保 / 耦合 / 60Hz / 电压改制 / FOB，再按汇率换算美金。
           </p>
         </div>
@@ -1832,62 +1994,7 @@
       </div>
     </section>
 
-    <section id="select-wqa">
-      <div class="section-head container reveal">
-        <div>
-          <div class="eyebrow">Selector · WQA 50Hz</div>
-          <h2>潜水排污泵 WQA 选型助手</h2>
-          <p>
-            对照《西子潜水排污泵系列 260302》<strong>P23–P27</strong> 中 50Hz WQA 性能曲线：工况点落在曲线<strong>下方</strong>表示该条曲线可满足需求。
-            本页根据《价格表》中各型号的铭牌 <strong>Q、H、P</strong> 做启发式筛选与排序；<strong>最终以样本原图与销售复核为准</strong>。选中型号可一键填入下方「型号报价」。
-          </p>
-        </div>
-      </div>
-      <div class="container quote-layout">
-        <div class="quote-panel reveal">
-          <h3>工况输入</h3>
-          <p class="hint">口径可填 <strong>DN65</strong>、<strong>65</strong>、<strong>2.5英寸</strong> 或 <strong>2.5"</strong>（英寸与 DN 对照已内置，如 2″=DN50）。功率支持 <strong>kW</strong> 或 <strong>hp</strong>（1 hp = 0.746 kW）。流量支持多种单位并换算为 m³/h。</p>
-          <div class="quote-controls">
-            <div class="quote-row">
-              <span class="label">排出口径</span>
-              <input type="text" id="selOutlet" placeholder="如 DN65 / 2英寸 / 留空" style="flex:1;max-width:240px;">
-            </div>
-            <div class="quote-row">
-              <span class="label">流量</span>
-              <input type="number" id="selQ" min="0" step="any" placeholder="可选" style="width:120px;">
-              <select id="selQUnit">
-                <option value="m3h" selected>m³/h</option>
-                <option value="ls">L/s</option>
-                <option value="lmin">L/min</option>
-                <option value="m3min">m³/min</option>
-                <option value="m3s">m³/s</option>
-                <option value="gpm">US gpm</option>
-              </select>
-            </div>
-            <div class="quote-row">
-              <span class="label">扬程 (m)</span>
-              <input type="number" id="selH" min="0" step="any" placeholder="可选" style="width:120px;">
-            </div>
-            <div class="quote-row">
-              <span class="label">电机功率</span>
-              <input type="number" id="selP" min="0" step="any" placeholder="可选" style="width:120px;">
-              <select id="selPUnit">
-                <option value="kw" selected>kW</option>
-                <option value="hp">hp</option>
-              </select>
-            </div>
-            <div class="quote-row">
-              <button type="button" class="btn btn-primary" id="wqaSelectRun">筛选候选型号</button>
-            </div>
-          </div>
-        </div>
-        <div class="quote-panel reveal reveal-delay-1">
-          <h3>候选列表</h3>
-          <p class="hint">列表按「能力裕量适中、避免尾端与严重过剩」启发式排序。点击型号可在「型号报价」中打开同型号试算。</p>
-          <div id="wqaSelectResults" class="hint" style="white-space:normal;">请填写至少扬程或流量之一后点击「筛选」。</div>
-        </div>
-      </div>
-    </section>
+
 
     <section id="contact">
       <div class="section-head container reveal">
