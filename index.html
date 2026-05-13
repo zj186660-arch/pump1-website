@@ -969,6 +969,21 @@
       margin-bottom: 6px;
     }
 
+    .link-model {
+      background: none;
+      border: none;
+      padding: 0;
+      color: var(--accent);
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
+      font-size: inherit;
+      font-family: inherit;
+    }
+    .link-model:hover {
+      color: var(--accent-deep);
+    }
+
     .btn:disabled {
       opacity: 0.45;
       cursor: not-allowed;
@@ -977,6 +992,7 @@
     }
 
     #catalog,
+    #select-wqa,
     #quote {
       scroll-margin-top: calc(var(--header-h) + 20px);
     }
@@ -1271,6 +1287,7 @@
         <a href="#about">关于我们</a>
         <a href="#products">产品与系统</a>
         <a href="#catalog">系列图册</a>
+        <a href="#select-wqa">水泵选型</a>
         <a href="#quote">型号报价</a>
         <a href="#applications">应用领域</a>
         <a href="#quality">研发与质量</a>
@@ -1288,6 +1305,7 @@
       <a href="#about">关于我们</a>
       <a href="#products">产品与系统</a>
       <a href="#catalog">系列图册</a>
+      <a href="#select-wqa">水泵选型</a>
       <a href="#quote">型号报价</a>
       <a href="#applications">应用领域</a>
       <a href="#quality">研发与质量</a>
@@ -1756,6 +1774,19 @@
               <label><input type="radio" name="qBearing" value="skf"> SKF（+SKF面价−标配面价）</label>
             </div>
             <div class="quote-row">
+              <span class="label">叶轮材质</span>
+              <label><input type="radio" name="qImp" value="ht200" checked> 标配 HT200（面价已含）</label>
+              <label><input type="radio" name="qImp" value="304"> 选配 304（+304叶轮面价−HT200叶轮面价）</label>
+            </div>
+            <div class="quote-row">
+              <span class="label">机封升级</span>
+              <span style="font-size:12px;color:var(--text-muted);max-width:280px;">博格曼等：填写《价格表》中该机封<strong>面价</strong>，系统按「机封面价−标配机封面价」计入（与轴承差价逻辑相同）。</span>
+            </div>
+            <div class="quote-row">
+              <span class="label">博格曼面价</span>
+              <input type="number" id="qBurgFace" min="0" step="1" placeholder="可选，如表列博格曼价" style="width:160px;">
+            </div>
+            <div class="quote-row">
               <span class="label">电缆长度 (m)</span>
               <input type="number" id="qCableM" value="9" min="0" max="200" step="0.5">
               <span style="font-size:12px;color:var(--text-muted);">标配 9m；单价 = 表内「9米电缆面价」÷9</span>
@@ -1769,11 +1800,11 @@
                 <option value="none">不选耦合</option>
                 <option value="oh_light_dn">OH 轻型 — 自动按型号口径</option>
                 <option value="oh_light_pick">OH 轻型 — 手选口径</option>
-                <option value="heavy_face">重型 / 其他 — 手填耦合面价</option>
+                <option value="heavy_face">手填耦合面价（表列价，任意型式）</option>
               </select>
               <select id="qCoupleDn" disabled style="display:none;"></select>
-              <input type="number" id="qCoupleFace" min="0" step="1" placeholder="耦合面价" style="display:none;width:120px;">
-              <label id="qCoupleHeavyWrap" style="display:none;"><input type="checkbox" id="qCoupleHeavy" checked> 重型规则：面价×0.5 后再×0.55</label>
+              <input type="number" id="qCoupleFace" min="0" step="1" placeholder="耦合表列面价" style="display:none;width:140px;">
+              <span style="font-size:12px;color:var(--text-muted);">耦合一律：<strong>表列面价 × 0.5</strong> 加入下方总价（不再 ×0.55）。</span>
             </div>
             <div class="quote-row">
               <label><input type="checkbox" id="qFob"> FOB（×1.05）</label>
@@ -1787,7 +1818,7 @@
         </div>
         <div class="quote-panel reveal reveal-delay-1">
           <h3>3. 计算结果</h3>
-          <p class="hint">与验算例一致：<code>50WQA15-16-1.5</code> +380V/50Hz +NSK +全保 +DN50重型耦合面价1500 +FOB → <strong>约 297.28 USD</strong>（汇率6.8）。</p>
+          <p class="hint">与验算例一致：<code>50WQA15-16-1.5</code> +380V/50Hz +NSK +全保 +耦合（OH 轻型 DN50：表列面价 ¥750×<strong>0.5</strong>）+FOB → 约 <strong>291.5 USD</strong>（汇率6.8；耦合仅半价计入、<strong>不再</strong>对耦合部分 ×0.55）。手填其它耦合面价时同理：表列价×0.5。</p>
           <div class="price-breakdown" id="priceBreakdown">请输入型号并选择条件。</div>
           <div class="quote-price-box" style="margin-top:0;">
             <strong>人民币（含税逻辑前合计）</strong>
@@ -1797,6 +1828,63 @@
             <p class="price-note">本页为前端静态计算，结果以合同与财务复核为准。可 <a href="西子泵业资料/价格表2026.3定稿.pdf" target="_blank" rel="noopener">打开价格表 PDF</a> 核对原始面价。</p>
           </div>
           <button type="button" class="btn btn-primary" style="width:100%;" id="mailQuoteBtn" disabled>发送型号询价邮件</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="select-wqa">
+      <div class="section-head container reveal">
+        <div>
+          <div class="eyebrow">Selector · WQA 50Hz</div>
+          <h2>潜水排污泵 WQA 选型助手</h2>
+          <p>
+            对照《西子潜水排污泵系列 260302》<strong>P23–P27</strong> 中 50Hz WQA 性能曲线：工况点落在曲线<strong>下方</strong>表示该条曲线可满足需求。
+            本页根据《价格表》中各型号的铭牌 <strong>Q、H、P</strong> 做启发式筛选与排序；<strong>最终以样本原图与销售复核为准</strong>。选中型号可一键填入下方「型号报价」。
+          </p>
+        </div>
+      </div>
+      <div class="container quote-layout">
+        <div class="quote-panel reveal">
+          <h3>工况输入</h3>
+          <p class="hint">口径可填 <strong>DN65</strong>、<strong>65</strong>、<strong>2.5英寸</strong> 或 <strong>2.5"</strong>（英寸与 DN 对照已内置，如 2″=DN50）。功率支持 <strong>kW</strong> 或 <strong>hp</strong>（1 hp = 0.746 kW）。流量支持多种单位并换算为 m³/h。</p>
+          <div class="quote-controls">
+            <div class="quote-row">
+              <span class="label">排出口径</span>
+              <input type="text" id="selOutlet" placeholder="如 DN65 / 2英寸 / 留空" style="flex:1;max-width:240px;">
+            </div>
+            <div class="quote-row">
+              <span class="label">流量</span>
+              <input type="number" id="selQ" min="0" step="any" placeholder="可选" style="width:120px;">
+              <select id="selQUnit">
+                <option value="m3h" selected>m³/h</option>
+                <option value="ls">L/s</option>
+                <option value="lmin">L/min</option>
+                <option value="m3min">m³/min</option>
+                <option value="m3s">m³/s</option>
+                <option value="gpm">US gpm</option>
+              </select>
+            </div>
+            <div class="quote-row">
+              <span class="label">扬程 (m)</span>
+              <input type="number" id="selH" min="0" step="any" placeholder="可选" style="width:120px;">
+            </div>
+            <div class="quote-row">
+              <span class="label">电机功率</span>
+              <input type="number" id="selP" min="0" step="any" placeholder="可选" style="width:120px;">
+              <select id="selPUnit">
+                <option value="kw" selected>kW</option>
+                <option value="hp">hp</option>
+              </select>
+            </div>
+            <div class="quote-row">
+              <button type="button" class="btn btn-primary" id="wqaSelectRun">筛选候选型号</button>
+            </div>
+          </div>
+        </div>
+        <div class="quote-panel reveal reveal-delay-1">
+          <h3>候选列表</h3>
+          <p class="hint">列表按「能力裕量适中、避免尾端与严重过剩」启发式排序。点击型号可在「型号报价」中打开同型号试算。</p>
+          <div id="wqaSelectResults" class="hint" style="white-space:normal;">请填写至少扬程或流量之一后点击「筛选」。</div>
         </div>
       </div>
     </section>
@@ -1862,6 +1950,7 @@
         <a href="#about">关于我们</a>
         <a href="#products">产品与系统</a>
         <a href="#catalog">系列图册</a>
+        <a href="#select-wqa">水泵选型</a>
         <a href="#quote">型号报价</a>
         <a href="#applications">应用领域</a>
         <a href="#quality">研发与质量</a>
@@ -2021,9 +2110,8 @@
       var qCoupleMode = document.getElementById("qCoupleMode");
       var qCoupleDn = document.getElementById("qCoupleDn");
       var qCoupleFace = document.getElementById("qCoupleFace");
-      var qCoupleHeavyWrap = document.getElementById("qCoupleHeavyWrap");
-      var qCoupleHeavy = document.getElementById("qCoupleHeavy");
       var qCableM = document.getElementById("qCableM");
+      var qBurgFace = document.getElementById("qBurgFace");
       var lastParse = null;
       var lastPriceText = "";
 
@@ -2092,8 +2180,7 @@
         var data = getPriceData();
         var meta = data.meta || {};
         var PUMP = meta.pumpDiscount != null ? meta.pumpDiscount : 0.55;
-        var CH = meta.couplingHeavyHalf != null ? meta.couplingHeavyHalf : 0.5;
-        var CD = meta.couplingDiscount != null ? meta.couplingDiscount : 0.55;
+        var COUPLE_HALF = meta.couplingListHalf != null ? meta.couplingListHalf : 0.5;
         var FOB = meta.fobFactor != null ? meta.fobFactor : 1.05;
         var HZ = meta.hz60Factor != null ? meta.hz60Factor : 1.1;
         var VA = meta.voltAdaptFactor != null ? meta.voltAdaptFactor : 1.1;
@@ -2131,13 +2218,52 @@
           lines.push("② 轴承差价 = ¥0（标配）");
         }
 
+        var impDiff = 0;
+        var impEl = document.querySelector('input[name="qImp"]:checked');
+        var impV = impEl ? impEl.value : "ht200";
+        if (impV === "304" && row && row.impeller_304 != null && row.impeller_ht200 != null) {
+          impDiff = Number(row.impeller_304) - Number(row.impeller_ht200);
+          if (impDiff < 0) {
+            lines.push("③ 叶轮：表列 304 面价低于 HT200，差价按 ¥0 计（请核对表列）");
+            impDiff = 0;
+          } else {
+            lines.push(
+              "③ 叶轮（304 − HT200）= " + money(row.impeller_304) + " − " + money(row.impeller_ht200) + " = ¥" + money(impDiff)
+            );
+          }
+        } else {
+          lines.push("③ 叶轮材质加价 = ¥0（标配 HT200）");
+        }
+
+        var sealDiff = 0;
+        var burgRaw = qBurgFace && qBurgFace.value ? Number(qBurgFace.value) : NaN;
+        if (isFinite(burgRaw) && burgRaw > 0 && row && row.seal_std != null) {
+          sealDiff = burgRaw - Number(row.seal_std);
+          if (sealDiff < 0) {
+            lines.push(
+              "④ 机封：填列面价低于标配（¥" +
+                money(burgRaw) +
+                " < ¥" +
+                money(row.seal_std) +
+                "），差价按 ¥0 计（请核对表列价）"
+            );
+            sealDiff = 0;
+          } else {
+            lines.push(
+              "④ 机封升级（填列面价 − 标配机封面价）= " + money(burgRaw) + " − " + money(row.seal_std) + " = ¥" + money(sealDiff)
+            );
+          }
+        } else {
+          lines.push("④ 机封升级差价 = ¥0（未填博格曼等面价）");
+        }
+
         var cableAdj = 0;
         var cableM = qCableM && qCableM.value ? Number(qCableM.value) : 9;
         if (row && row.cable_9m != null && !isNaN(cableM)) {
           var perM = Number(row.cable_9m) / 9;
           cableAdj = (cableM - 9) * perM;
           lines.push(
-            "③ 电缆调整 = (长度−9m)×(9m电缆面价÷9) = (" +
+            "⑤ 电缆调整 = (长度−9m)×(9m电缆面价÷9) = (" +
               cableM +
               "−9)×(" +
               money(row.cable_9m) +
@@ -2145,47 +2271,41 @@
               money(cableAdj)
           );
         } else {
-          lines.push("③ 电缆调整 = ¥0（无表内电缆数据）");
+          lines.push("⑤ 电缆调整 = ¥0（无表内电缆数据）");
         }
 
         var fullAdd = 0;
         if (document.getElementById("qFull") && document.getElementById("qFull").checked && row && row.full_warranty != null) {
           fullAdd = Number(row.full_warranty);
-          lines.push("④ 全保 = ¥" + money(fullAdd));
+          lines.push("⑥ 全保 = ¥" + money(fullAdd));
         } else {
-          lines.push("④ 全保 = ¥0（未勾选或无表内数据）");
+          lines.push("⑥ 全保 = ¥0（未勾选或无表内数据）");
         }
 
         var coupLine = 0;
-        var coupDesc = "⑤ 耦合 = ¥0";
+        var coupDesc = "⑦ 耦合 = ¥0";
         if (qCouple && qCouple.checked && qCoupleMode) {
           var mode = qCoupleMode.value;
           var cmap = (data.coupling || {}).OH_HT200_light_face || {};
           var cFace = null;
           if (mode === "oh_light_dn") {
             cFace = cmap[p.outletMm];
-            coupDesc = "⑤ 耦合 OH轻型 面价(DN" + p.outletMm + ") = ¥" + (cFace != null ? money(cFace) : "?");
+            coupDesc = "⑦ 耦合 OH轻型 表列面价(DN" + p.outletMm + ") = ¥" + (cFace != null ? money(cFace) : "?");
           } else if (mode === "oh_light_pick" && qCoupleDn) {
             cFace = cmap[qCoupleDn.value];
-            coupDesc = "⑤ 耦合 OH轻型 面价(DN" + qCoupleDn.value + ") = ¥" + (cFace != null ? money(cFace) : "?");
+            coupDesc = "⑦ 耦合 OH轻型 表列面价(DN" + qCoupleDn.value + ") = ¥" + (cFace != null ? money(cFace) : "?");
           } else if (mode === "heavy_face" && qCoupleFace && qCoupleFace.value) {
             cFace = Number(qCoupleFace.value);
-            coupDesc = "⑤ 耦合 手填面价 = ¥" + money(cFace);
+            coupDesc = "⑦ 耦合 手填表列面价 = ¥" + money(cFace);
           }
           if (cFace != null && !isNaN(cFace) && cFace > 0) {
-            if (mode === "heavy_face" && qCoupleHeavy && qCoupleHeavy.checked) {
-              coupLine = cFace * CH * CD;
-              coupDesc +=
-                " → 重型规则：×" + CH + "×" + CD + " = ¥" + money(coupLine);
-            } else if (mode === "oh_light_dn" || mode === "oh_light_pick") {
-              coupLine = cFace * CD;
-              coupDesc += " → ×" + CD + " = ¥" + money(coupLine);
-            }
+            coupLine = cFace * COUPLE_HALF;
+            coupDesc += " → 计入价：表列×" + COUPLE_HALF + " = ¥" + money(coupLine);
           }
         }
         lines.push(coupDesc);
 
-        var sub = pumpActual + bearingDiff + cableAdj + fullAdd + coupLine;
+        var sub = pumpActual + bearingDiff + impDiff + sealDiff + cableAdj + fullAdd + coupLine;
         lines.push("— — —");
         lines.push("小计（含税逻辑前）= ¥" + money(sub));
 
@@ -2262,7 +2382,7 @@
         "qCoupleMode",
         "qCoupleDn",
         "qCoupleFace",
-        "qCoupleHeavy"
+        "qBurgFace"
       ].forEach(function (id) {
         var el = document.getElementById(id);
         if (!el) return;
@@ -2276,6 +2396,9 @@
         el.addEventListener("change", runPriceCalc);
       });
       document.querySelectorAll('input[name="qVolt"]').forEach(function (el) {
+        el.addEventListener("change", runPriceCalc);
+      });
+      document.querySelectorAll('input[name="qImp"]').forEach(function (el) {
         el.addEventListener("change", runPriceCalc);
       });
 
@@ -2303,9 +2426,6 @@
         if (qCoupleFace) {
           var showF = on && mode === "heavy_face";
           qCoupleFace.style.display = showF ? "inline-block" : "none";
-        }
-        if (qCoupleHeavyWrap) {
-          qCoupleHeavyWrap.style.display = on && mode === "heavy_face" ? "inline" : "none";
         }
       }
       syncCouplingUi();
@@ -2338,6 +2458,13 @@
       }
 
 
+      window.XIZI_runParse = runParse;
+      window.XIZI_fillQuoteModel = function (m) {
+        if (modelInput) modelInput.value = m;
+        runParse();
+        location.hash = "quote";
+      };
+
       document.getElementById("inquiryForm").addEventListener("submit", function (e) {
         e.preventDefault();
         var name = document.getElementById("name").value.trim();
@@ -2359,5 +2486,6 @@
       });
     })();
   </script>
+  <script src="assets/wqa-selector.js"></script>
 </body>
 </html>

@@ -3,6 +3,7 @@ window.__XIZI_PRICE_DATA__ = {
     "source": "价格表2026.3定稿.pdf",
     "pumpDiscount": 0.55,
     "couplingHeavyHalf": 0.5,
+    "couplingListHalf": 0.5,
     "couplingDiscount": 0.55,
     "fobFactor": 1.05,
     "hz60Factor": 1.1,
@@ -3448,6 +3449,6 @@ window.__XIZI_PRICE_DATA__ = {
       "500": 28200.0,
       "600": 42380.0
     },
-    "note": "OH(HT200) 轻型耦合面价；重型等请用手动面价并勾选「重型×0.5」"
+    "note": "OH(HT200) 轻型耦合表列面价；网页计价：耦合一律按表列面价×0.5加入总价（不对耦合再×水泵折扣0.55）。"
   }
 };

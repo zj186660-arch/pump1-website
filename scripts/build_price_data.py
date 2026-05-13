@@ -111,7 +111,10 @@ def parse_coupling_oh(doc) -> dict:
                     break
     if len(prices) < 5:
         prices = dict(fallback)
-    return {"OH_HT200_light_face": prices, "note": "OH(HT200) 轻型耦合面价；重型等请用手动面价并勾选「重型×0.5」"}
+    return {
+        "OH_HT200_light_face": prices,
+        "note": "OH(HT200) 轻型耦合表列面价；网页计价：耦合按表列面价×0.5加入总价。",
+    }
 
 
 def main():
@@ -124,6 +127,7 @@ def main():
             "source": "价格表2026.3定稿.pdf",
             "pumpDiscount": 0.55,
             "couplingHeavyHalf": 0.5,
+            "couplingListHalf": 0.5,
             "couplingDiscount": 0.55,
             "fobFactor": 1.05,
             "hz60Factor": 1.1,
