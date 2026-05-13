@@ -71,7 +71,8 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .hero-blob,
-      .hero-bg::before,
+      .hero-ambient,
+      .hero-swell,
       .brand-mark,
       .brand-mark::after,
       .ticker-inner,
@@ -84,6 +85,9 @@
         opacity: 1 !important;
         transform: none !important;
         filter: none !important;
+      }
+      .hero-video {
+        display: none !important;
       }
       .reveal {
         opacity: 1 !important;
@@ -356,19 +360,87 @@
       z-index: 0;
       pointer-events: none;
     }
-    .hero-bg::before {
-      content: "";
+    .hero-video-wrap {
       position: absolute;
-      inset: -20%;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+    }
+    .hero-video {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1.1s ease;
+      filter: saturate(1.08) contrast(1.05);
+    }
+    .hero-video.is-ready {
+      opacity: 1;
+    }
+    .hero-video-scrim {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(
+        168deg,
+        rgba(0, 6, 14, 0.88) 0%,
+        rgba(3, 28, 58, 0.62) 38%,
+        rgba(2, 45, 72, 0.45) 55%,
+        rgba(0, 10, 22, 0.9) 100%
+      );
+    }
+    .hero-ambient {
+      position: absolute;
+      inset: -15%;
+      z-index: 2;
+      opacity: 0.55;
       background:
-        radial-gradient(ellipse 70% 55% at 75% 15%, var(--accent-glow), transparent 52%),
-        radial-gradient(ellipse 45% 40% at 12% 75%, rgba(45, 212, 191, 0.18), transparent 50%),
-        radial-gradient(ellipse 50% 50% at 50% 100%, rgba(232, 184, 74, 0.08), transparent 45%);
+        radial-gradient(ellipse 72% 58% at 78% 12%, var(--accent-glow), transparent 54%),
+        radial-gradient(ellipse 48% 42% at 10% 72%, rgba(45, 212, 191, 0.2), transparent 52%),
+        radial-gradient(ellipse 55% 48% at 50% 100%, rgba(232, 184, 74, 0.1), transparent 48%);
       animation: hero-mesh 14s ease-in-out infinite;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+    .hero-swell {
+      position: absolute;
+      left: -15%;
+      right: -15%;
+      height: 45%;
+      bottom: -8%;
+      z-index: 3;
+      border-radius: 50% 50% 0 0 / 38% 38% 0 0;
+      background: radial-gradient(ellipse 80% 55% at 50% 100%, rgba(13, 125, 242, 0.22), transparent 70%);
+      animation: hero-swell 9s ease-in-out infinite;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+    .hero-swell--2 {
+      animation-delay: -4.5s;
+      opacity: 0.65;
+      transform-origin: 50% 100%;
+      background: radial-gradient(ellipse 70% 50% at 40% 100%, rgba(125, 211, 252, 0.18), transparent 68%);
+    }
+    .hero--video-on .hero-blob {
+      opacity: 0.28;
+    }
+    .hero--video-on .hero-flow {
+      opacity: 0.22;
+    }
+    @keyframes hero-swell {
+      0%, 100% { transform: translateY(0) scaleX(1); opacity: 0.55; }
+      50% { transform: translateY(-12px) scaleX(1.04); opacity: 0.85; }
     }
     .hero-grid-pattern {
       position: absolute;
       inset: 0;
+      z-index: 4;
       opacity: 0.22;
       background-image:
         linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
@@ -380,8 +452,9 @@
       position: absolute;
       border-radius: 50%;
       filter: blur(72px);
-      opacity: 0.55;
+      opacity: 0.42;
       mix-blend-mode: screen;
+      z-index: 5;
     }
     .hero-blob--1 {
       width: min(52vw, 520px);
@@ -406,8 +479,9 @@
       width: min(38vw, 420px);
       height: min(38vw, 420px);
       transform: translateY(-50%);
-      opacity: 0.35;
+      opacity: 0.32;
       animation: float-y 6s ease-in-out infinite;
+      z-index: 6;
     }
     .hero-flow svg { width: 100%; height: 100%; }
     .hero-wave {
@@ -426,7 +500,7 @@
     }
     .hero-grid {
       position: relative;
-      z-index: 1;
+      z-index: 8;
       max-width: var(--max);
       margin: 0 auto;
       padding: 88px 24px 120px;
@@ -464,7 +538,27 @@
       margin: 0 0 20px;
       letter-spacing: -0.02em;
       color: #fff;
-      text-shadow: 0 2px 40px rgba(13, 125, 242, 0.25);
+      text-shadow: 0 2px 32px rgba(0, 0, 0, 0.45), 0 0 60px rgba(13, 125, 242, 0.35);
+    }
+    .hero-video-note {
+      margin: 0 0 20px;
+      font-size: 12px;
+      line-height: 1.55;
+      color: rgba(226, 242, 255, 0.72);
+      max-width: 520px;
+    }
+    .hero-video-note code {
+      font-size: 11px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      color: rgba(226, 242, 255, 0.9);
+    }
+    .hero-video-note a {
+      color: rgba(186, 230, 253, 0.95);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .hero--video-on .hero-video-note {
+      display: none;
     }
     .hero-sub {
       font-size: 17px;
@@ -1665,6 +1759,24 @@
   <main id="top">
     <section class="hero">
       <div class="hero-bg" aria-hidden="true">
+        <div class="hero-video-wrap">
+          <video
+            id="heroCinematicVideo"
+            class="hero-video"
+            muted
+            playsinline
+            loop
+            preload="metadata"
+            aria-hidden="true"
+          >
+            <source src="assets/hero-cinematic.webm" type="video/webm">
+            <source src="assets/hero-cinematic.mp4" type="video/mp4">
+          </video>
+          <div class="hero-video-scrim"></div>
+        </div>
+        <div class="hero-ambient"></div>
+        <div class="hero-swell"></div>
+        <div class="hero-swell hero-swell--2"></div>
         <div class="hero-blob hero-blob--1"></div>
         <div class="hero-blob hero-blob--2"></div>
         <div class="hero-grid-pattern"></div>
@@ -1686,7 +1798,11 @@
       <div class="hero-grid">
         <div class="hero-copy">
           <div class="hero-kicker">Intelligent flow · 智慧流体</div>
-          <h1>以可靠泵送与系统集成<br>服务市政与工业的每一滴水流</h1>
+          <h1>以可靠泵送与系统集成<br>服务市政与工业的每一滴水</h1>
+          <p class="hero-video-note">
+            首屏支持全幅循环视频背景（与<a href="https://leoglobal.com/" rel="noopener noreferrer" target="_blank">利欧集团官网</a>类似的沉浸式观感）。将您自有版权或已授权的海浪、海洋主题短片命名为
+            <code>assets/hero-cinematic.webm</code> 与 <code>assets/hero-cinematic.mp4</code> 放入项目即可自动播放；未放置文件时仍显示渐变与动效层。
+          </p>
           <p class="hero-sub">
             西子泵业（xizipumps）专注潜水排污泵、污水提升与搅拌推流、轴流排水及一体式智能泵站与泵房，
             以工程化交付能力与全生命周期服务理念，对标国际一线品牌的产品定义与项目规范。
@@ -2443,6 +2559,33 @@
         }
         window.addEventListener("hashchange", fromHash);
         fromHash();
+      })();
+
+      (function initHeroCinematicVideo() {
+        if (reduceMotion) return;
+        var v = document.getElementById("heroCinematicVideo");
+        var hero = document.querySelector(".hero");
+        if (!v) return;
+        v.addEventListener(
+          "loadeddata",
+          function () {
+            v.classList.add("is-ready");
+            if (hero) hero.classList.add("hero--video-on");
+          },
+          { once: true }
+        );
+        v.addEventListener("error", function () {
+          v.classList.remove("is-ready");
+          if (hero) hero.classList.remove("hero--video-on");
+        });
+        var tryPlay = function () {
+          var p = v.play();
+          if (p && typeof p.catch === "function") p.catch(function () {});
+        };
+        if (document.visibilityState === "visible") tryPlay();
+        document.addEventListener("visibilitychange", function () {
+          if (document.visibilityState === "visible") tryPlay();
+        });
       })();
 
       (function initOceanVideo() {
