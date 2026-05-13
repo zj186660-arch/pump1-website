@@ -165,21 +165,29 @@
       flex-shrink: 0;
     }
     .brand-mark {
-      width: 46px;
-      height: 46px;
-      background: linear-gradient(135deg, var(--accent) 0%, #043d7a 50%, var(--accent-teal) 100%);
-      background-size: 200% 200%;
-      animation: brand-shift 8s ease-in-out infinite;
-      border-radius: 12px;
+      width: 50px;
+      height: 50px;
+      padding: 0;
+      border-radius: 14px;
+      background: radial-gradient(circle at 30% 22%, rgba(255,255,255,0.35) 0%, transparent 42%),
+        linear-gradient(145deg, #021a32 0%, #063d78 38%, var(--accent) 58%, #0a4d6e 85%, var(--accent-teal) 100%);
+      background-size: 140% 140%;
+      animation: brand-shift 10s ease-in-out infinite;
       display: grid;
       place-items: center;
       color: white;
-      font-weight: 700;
-      font-size: 15px;
-      letter-spacing: -0.02em;
-      box-shadow: 0 10px 28px rgba(13, 125, 242, 0.4);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.12) inset,
+        0 12px 32px rgba(4, 20, 48, 0.45),
+        0 4px 12px rgba(13, 125, 242, 0.35);
       position: relative;
       overflow: hidden;
+    }
+    .brand-mark svg {
+      width: 30px;
+      height: 30px;
+      display: block;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25));
     }
     @keyframes brand-shift {
       0%, 100% { background-position: 0% 50%; }
@@ -766,6 +774,184 @@
       object-position: center center;
     }
 
+
+    /* Ocean showcase + compact product tabs */
+    .product-showcase-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+      gap: clamp(22px, 3.2vw, 36px);
+      align-items: stretch;
+      margin-top: 40px;
+    }
+    @media (max-width: 1020px) {
+      .product-showcase-grid { grid-template-columns: 1fr; }
+    }
+    .ocean-stage {
+      position: relative;
+      min-height: min(340px, 52vw);
+      border-radius: calc(var(--radius) + 8px);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 26px 70px rgba(2, 12, 28, 0.4);
+    }
+    .ocean-fallback {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(185deg, #010a12 0%, #042b4d 42%, #056891 78%, #023a4d 100%);
+      z-index: 0;
+    }
+    .ocean-bubbles {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: radial-gradient(circle at 18% 78%, rgba(45, 212, 191, 0.22), transparent 38%),
+        radial-gradient(circle at 88% 22%, rgba(13, 125, 242, 0.28), transparent 42%);
+      animation: ocean-pulse 14s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes ocean-pulse {
+      0%, 100% { opacity: 0.28; }
+      50% { opacity: 0.45; }
+    }
+    .ocean-waves-svg {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -2px;
+      width: 100%;
+      height: auto;
+      z-index: 2;
+      opacity: 0.9;
+      pointer-events: none;
+    }
+    .ocean-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+    .ocean-video.is-playing {
+      opacity: 0.38;
+      mix-blend-mode: screen;
+    }
+    .ocean-overlay {
+      position: relative;
+      z-index: 3;
+      padding: 28px 26px 120px;
+      max-width: 22rem;
+    }
+    .ocean-kicker {
+      font-family: var(--font-display);
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(186, 230, 253, 0.95);
+      margin: 0 0 10px;
+    }
+    .ocean-copy {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.7;
+      color: rgba(226, 242, 255, 0.88);
+    }
+    .ocean-copy code {
+      font-size: 12px;
+      background: rgba(0, 30, 50, 0.45);
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: #e0f2fe;
+    }
+    .aqua-mascot {
+      position: absolute;
+      right: 6%;
+      bottom: 8%;
+      z-index: 4;
+      width: min(140px, 32vw);
+      margin: 0;
+      opacity: 0.92;
+      filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.35));
+      pointer-events: none;
+    }
+    .aqua-mascot figcaption {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+    .product-tabs {
+      display: flex;
+      flex-direction: column;
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(12px);
+      border-radius: calc(var(--radius) + 6px);
+      border: 1px solid rgba(15, 23, 42, 0.07);
+      padding: 20px 20px 22px;
+      box-shadow: var(--shadow-soft);
+    }
+    .prod-tab-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .prod-tab {
+      border: 1px solid rgba(15, 23, 42, 0.1);
+      background: rgba(255, 255, 255, 0.9);
+      padding: 9px 15px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-family: var(--font-display);
+      transition: color 0.2s, border-color 0.2s, box-shadow 0.25s, background 0.2s;
+    }
+    .prod-tab:hover {
+      border-color: rgba(13, 125, 242, 0.35);
+      color: var(--accent-deep);
+    }
+    .prod-tab.is-active {
+      border-color: rgba(13, 125, 242, 0.5);
+      color: #044089;
+      background: linear-gradient(135deg, rgba(13, 125, 242, 0.12), rgba(45, 212, 191, 0.08));
+      box-shadow: 0 6px 18px rgba(13, 125, 242, 0.12);
+    }
+    .prod-panel {
+      display: none;
+      animation: prod-fade 0.35s var(--ease-out-expo);
+    }
+    .prod-panel.is-active { display: block; }
+    @keyframes prod-fade {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .prod-panel .detail-head {
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      background-size: 100% 2px;
+    }
+    .prod-panel .detail-head h3 { font-size: 19px; }
+    .prod-panel .detail-head .en-title { font-size: 12px; }
+    .prod-panel .detail-layout {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    .prod-panel .detail-layout p {
+      font-size: 14px;
+      line-height: 1.65;
+      margin-bottom: 0;
+    }
+    .prod-panel .spec-table { font-size: 13px; }
+    .prod-panel .spec-table th,
+    .prod-panel .spec-table td { padding: 9px 11px; }
     /* Series catalog (from 系列 PDF covers) */
     .catalog-section {
       margin-top: 40px;
@@ -1381,7 +1567,20 @@
   <header class="site-header" id="siteHeader">
     <div class="header-inner">
       <a href="#top" class="brand">
-        <div class="brand-mark">XZ</div>
+        <div class="brand-mark" aria-label="西子泵业标志">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+            <circle cx="20" cy="20" r="17" stroke="rgba(255,255,255,0.55)" stroke-width="1.2"/>
+            <path d="M20 7v6M20 27v6M7 20h6M27 20h6" stroke="rgba(255,255,255,0.45)" stroke-width="1" stroke-linecap="round"/>
+            <path d="M20 12c-4.5 2-7 5.2-7 8.5 0 4.8 3.1 8.8 7 9.5 3.9-.7 7-4.7 7-9.5 0-3.3-2.5-6.5-7-8.5Z" fill="rgba(255,255,255,0.92)"/>
+            <path d="M14 22c2.2 1.8 5.1 2.8 6 2.6 1.3-.2 4-1.4 6-3.8" stroke="url(#bzA)" stroke-width="1.35" stroke-linecap="round"/>
+            <circle cx="20" cy="19" r="2.6" fill="#0369a1"/>
+            <defs>
+              <linearGradient id="bzA" x1="14" y1="22" x2="26" y2="21" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#7dd3fc"/><stop offset="1" stop-color="#fef08a"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
         <div class="brand-text">
           <div class="cn">西子泵业</div>
           <div class="en">Xizi Pumps · xizipumps</div>
@@ -1453,6 +1652,7 @@
             <a class="btn btn-ghost" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.28);color:white;" href="#products">产品与系统</a>
             <a class="btn btn-ghost" style="background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.22);color:rgba(255,255,255,0.95);" href="#quote">型号报价</a>
             <a class="btn btn-ghost" style="background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.92);" href="#contact">联系顾问</a>
+          </div>
         </div>
         <div class="hero-panel">
           <h3>工程级交付指标（典型范围，可项目定制）</h3>
@@ -1532,7 +1732,7 @@
         <div>
           <div class="eyebrow">Products &amp; Systems</div>
           <h2>产品与系统</h2>
-          <p>以下为西子泵业核心产品线概览。点击卡片可跳转至对应技术说明与典型参数表。</p>
+          <p>核心产品线速览；下方海洋主题为原创视觉示意。技术参数已收纳于右侧标签页，避免冗长滚动。</p>
         </div>
       </div>
       <div class="container product-grid">
@@ -1542,7 +1742,7 @@
           </div>
           <div class="product-card-body">
             <h3>潜水排污泵系列</h3>
-            <p>多材质过流件、抗堵塞叶轮与通道式结构，适配市政与工业污水输送。卡片配图节选自英文版《Xizi Submersible Sewage Pump Series》样本首页，便于与下方型号示例对照。</p>
+            <p>多材质过流件，市政与工业污水。</p>
             <a class="link-arrow" href="#product-wq">查看技术说明</a>
           </div>
         </article>
@@ -1552,7 +1752,7 @@
           </div>
           <div class="product-card-body">
             <h3>污水提升器</h3>
-            <p>地下空间、地铁、商业综合体等重力排水受限场景的一体化提升单元。</p>
+            <p>地下空间重力排水受限场景。</p>
             <a class="link-arrow" href="#product-lift">查看技术说明</a>
           </div>
         </article>
@@ -1560,7 +1760,7 @@
           <div class="product-card-visual" style="background:linear-gradient(145deg,#2a1f44,#6b4c9a 120%); background-size:200% 200%;"><span class="pcv-label">MIX</span></div>
           <div class="product-card-body">
             <h3>搅拌机 / 推流器</h3>
-            <p>厌氧、缺氧、好氧池混合与推流，低剪切、高能效水下搅拌解决方案。</p>
+            <p>生化池混合与推流。</p>
             <a class="link-arrow" href="#product-mix">查看技术说明</a>
           </div>
         </article>
@@ -1570,7 +1770,7 @@
           </div>
           <div class="product-card-body">
             <h3>轴流泵 / 混流泵</h3>
-            <p>大流量低扬程排涝、调水与雨水泵站，兼顾汽蚀性能与装置效率。</p>
+            <p>大流量排涝、调水与雨水泵站。</p>
             <a class="link-arrow" href="#product-af">查看技术说明</a>
           </div>
         </article>
@@ -1578,7 +1778,7 @@
           <div class="product-card-visual" style="background:linear-gradient(145deg,#152238,#c9a227 160%); background-size:200% 200%;"><span class="pcv-label">IPS</span></div>
           <div class="product-card-body">
             <h3>一体式智能泵站及泵房</h3>
-            <p>工厂预制、整体吊装，集成泵组、管路、阀门、格栅、除臭与自控云平台。</p>
+            <p>预制筒体、泵组与自控集成。</p>
             <a class="link-arrow" href="#product-ips">查看技术说明</a>
           </div>
         </article>
@@ -1616,147 +1816,157 @@
         </div>
       </div>
 
-      <div class="container" style="margin-top:64px;">
-        <div class="detail-block reveal" id="product-wq">
-          <div class="detail-head">
-            <h3>潜水排污泵（多材质）</h3>
-            <span class="en-title">Submersible sewage pumps · WQ / WQ-H / stainless &amp; duplex options</span>
+      <div class="container product-showcase-grid reveal" id="productTabsRoot">
+        <div class="ocean-stage">
+          <div class="ocean-fallback" aria-hidden="true"></div>
+          <div class="ocean-bubbles" aria-hidden="true"></div>
+          <video class="ocean-video" id="oceanAmbientVideo" muted playsinline loop preload="metadata" aria-label="海洋主题背景视频（可选）">
+            <source src="assets/ocean-ambient.webm" type="video/webm">
+          </video>
+          <svg class="ocean-waves-svg" viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill="rgba(240,247,255,0.55)" d="M0,64 C240,20 480,100 720,48 C960,-4 1200,88 1440,40 L1440,120 L0,120 Z"/>
+            <path fill="rgba(255,255,255,0.35)" d="M0,88 C200,48 400,110 720,72 C1040,34 1240,96 1440,56 L1440,120 L0,120 Z"/>
+          </svg>
+          <div class="ocean-overlay">
+            <p class="ocean-kicker">Marine DNA · 流体可靠性</p>
+            <p class="ocean-copy">借鉴船舶与海洋工程的耐候与防腐思路，用更紧凑的版式呈现产品线。将企业宣传片保存为 <code>assets/ocean-ambient.webm</code> 即可自动作为背景视频。</p>
           </div>
-          <div class="detail-layout">
-            <div>
-              <p>
-                适用于输送城市生活污水、工业废水及含固体颗粒与纤维的介质。叶轮型式包括单通道、双通道、旋流式与切割式，
-                可通过水力模型匹配防缠绕与通过能力。过流材质可选灰铸铁、球墨铸铁、304/316L 不锈钢及双相钢，
-                密封系统按介质温度与含固率配置单端面机械密封、双端面机械密封或集装式密封，并可选泄漏监测与轴承温升保护。
-              </p>
-              <p>
-                <strong>型号示例（西子口径）：</strong><code style="background:#f0f4fa;padding:2px 8px;border-radius:6px;font-size:13px;">150WQA150-21-15-4P-Z</code>
-                — 依次为排出口径（mm）、系列代号（如 WQA）、额定流量（m³/h）、额定扬程（m）、电机功率（kW）、电机极数（如 4P）、安装方式代号（Z 为自动耦合式等）。
-                可先 <a href="#select-wqa">WQA 选型</a>，再在 <a href="#quote">「型号报价」</a> 中解析并生成询价摘要。
-              </p>
-              <p>
-                典型配套：不锈钢导杆自动耦合装置、出水弯管、双导轨起吊系统；控制侧支持直接启动、星三角、软启动与变频器。
-              </p>
-            </div>
-            <div>
-              <table class="spec-table">
-                <tbody>
-                  <tr><th>口径 / Outlet</th><td>DN50–DN600（可扩展至更大口径项目定制）</td></tr>
-                  <tr><th>流量 / Flow</th><td>约 5–5500 m³/h（按系列与电机配置）</td></tr>
-                  <tr><th>扬程 / Head</th><td>约 5–100 m</td></tr>
-                  <tr><th>介质温度</th><td>常规 ≤40 °C；高温型可达 ≤80 °C（选型确认）</td></tr>
-                  <tr><th>电机</th><td>IE3 效率等级（可按项目指定 IE4 / 防爆）</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <figure class="aqua-mascot">
+            <figcaption>浅水精灵向导原创示意形象</figcaption>
+            <svg viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="浅水精灵向导原创示意">
+              <ellipse cx="60" cy="148" rx="38" ry="6" fill="rgba(0,40,70,0.35)"/>
+              <path d="M60 28c-16 0-28 12-28 28 0 8 3 16 8 22-6 10-10 24-10 38 0 18 8 32 30 32s30-14 30-32c0-14-4-28-10-38 5-6 8-14 8-22 0-16-12-28-28-28z" fill="url(#aqgMascot)"/>
+              <path d="M42 52 Q60 62 78 52" stroke="rgba(255,255,255,0.5)" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <circle cx="50" cy="46" r="3" fill="#0c4a6e"/>
+              <circle cx="70" cy="46" r="3" fill="#0c4a6e"/>
+              <path d="M34 78c8 18 44 18 52 0" stroke="rgba(255,255,255,0.45)" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <path d="M22 70 Q8 95 18 120 Q28 100 36 88" fill="rgba(56,189,248,0.35)" stroke="rgba(186,230,253,0.5)" stroke-width="1.2"/>
+              <path d="M98 70 Q112 95 102 120 Q92 100 84 88" fill="rgba(56,189,248,0.35)" stroke="rgba(186,230,253,0.5)" stroke-width="1.2"/>
+              <circle cx="60" cy="88" r="10" fill="none" stroke="rgba(254,240,138,0.85)" stroke-width="2"/>
+              <path d="M56 88h8M60 84v8" stroke="rgba(254,240,138,0.9)" stroke-width="1.5" stroke-linecap="round"/>
+              <defs>
+                <linearGradient id="aqgMascot" x1="32" y1="28" x2="88" y2="130" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#38bdf8"/><stop offset="1" stop-color="#0369a1"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </figure>
         </div>
-
-        <div class="detail-block reveal" id="product-lift">
-          <div class="detail-head">
-            <h3>污水提升器</h3>
-            <span class="en-title">Sewage lifting stations · PE / GRP tank · duplex pump logic</span>
+        <div class="product-tabs">
+          <div class="prod-tab-bar" role="tablist" aria-label="产品技术说明">
+            <button type="button" class="prod-tab is-active" role="tab" data-tab="product-wq" aria-selected="true">潜水排污泵</button>
+            <button type="button" class="prod-tab" role="tab" data-tab="product-lift" aria-selected="false">污水提升器</button>
+            <button type="button" class="prod-tab" role="tab" data-tab="product-mix" aria-selected="false">搅拌 / 推流</button>
+            <button type="button" class="prod-tab" role="tab" data-tab="product-af" aria-selected="false">轴流 / 混流</button>
+            <button type="button" class="prod-tab" role="tab" data-tab="product-ips" aria-selected="false">智能泵站</button>
           </div>
-          <div class="detail-layout">
-            <div>
-              <p>
-                针对无法重力排入市政管网的场景，提供单泵或双泵互备提升单元。箱体可选聚乙烯滚塑或玻璃钢材质，
-                内置液位浮球/投入式液位计、止回阀、闸阀及通气管路；双泵系统具备轮换运行、故障切换与高液位报警。
-                可集成切割泵或通道泵以应对卫生巾、纤维类缠绕物。
-              </p>
+          <div class="prod-tab-panels">
+            <div class="prod-panel is-active" id="product-wq" role="tabpanel">
+              <div class="detail-head">
+                <h3>潜水排污泵</h3>
+                <span class="en-title">WQ / WQA · multi-material</span>
+              </div>
+              <div class="detail-layout">
+                <div>
+                  <p>市政与工业污水、含固颗粒与纤维介质；单/双通道、旋流与切割叶轮可选。过流件铸铁、不锈钢或双相钢；密封与轴承按介质分级。</p>
+                  <p><strong>示例：</strong><code style="background:#f0f4fa;padding:2px 8px;border-radius:6px;font-size:13px;">150WQA150-21-15-4P-Z</code> — 口径·系列·Q·H·kW·极数·安装。先 <a href="#select-wqa">WQA 选型</a> 再 <a href="#quote">型号报价</a>。</p>
+                </div>
+                <div>
+                  <table class="spec-table">
+                    <tbody>
+                      <tr><th>口径</th><td>DN50–DN600（可扩展）</td></tr>
+                      <tr><th>流量</th><td>约 5–5500 m³/h</td></tr>
+                      <tr><th>扬程</th><td>约 5–100 m</td></tr>
+                      <tr><th>电机</th><td>IE3 起（可选 IE4 / 防爆）</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
-            <div>
-              <table class="spec-table">
-                <tbody>
-                  <tr><th>有效容积</th><td>约 60–3000 L（按停留时间与峰值流量计算）</td></tr>
-                  <tr><th>安装方式</th><td>地面式 / 地埋式 / 夹层式</td></tr>
-                  <tr><th>控制</th><td>PLC 或专用控制器；可选 GSM 短信 / 4G 远程报警</td></tr>
-                  <tr><th>标准与认证</th><td>按项目目标市场协助整理 CE / 国内质检等符合性文件</td></tr>
-                </tbody>
-              </table>
+            <div class="prod-panel" id="product-lift" role="tabpanel">
+              <div class="detail-head">
+                <h3>污水提升器</h3>
+                <span class="en-title">Lifting stations · PE / GRP</span>
+              </div>
+              <div class="detail-layout">
+                <div>
+                  <p>单泵或双泵互备；液位与止回集成。切割泵或通道泵应对缠绕物；可选远程告警。</p>
+                </div>
+                <div>
+                  <table class="spec-table">
+                    <tbody>
+                      <tr><th>容积</th><td>约 60–3000 L</td></tr>
+                      <tr><th>安装</th><td>地面 / 地埋 / 夹层</td></tr>
+                      <tr><th>控制</th><td>PLC 或专用控制器</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-
-        <div class="detail-block reveal" id="product-mix">
-          <div class="detail-head">
-            <h3>潜水搅拌机与推流器</h3>
-            <span class="en-title">Submersible mixers &amp; flow promoters</span>
-          </div>
-          <div class="detail-layout">
-            <div>
-              <p>
-                用于生物处理池内泥水混合、固体悬浮与推流，防止沉积。推流器采用低速大叶轮设计，配合安装导杆与转向角可调底座，
-                改善流场分布并降低能耗。电机 F 级绝缘，标配过热与泄漏保护；不锈钢或环氧涂层叶轮适应腐蚀性环境。
-              </p>
+            <div class="prod-panel" id="product-mix" role="tabpanel">
+              <div class="detail-head">
+                <h3>潜水搅拌机与推流器</h3>
+                <span class="en-title">Mixers and flow promoters</span>
+              </div>
+              <div class="detail-layout">
+                <div>
+                  <p>生化池混合与推流，低速大叶轮改善流场；过热与泄漏保护标配。</p>
+                </div>
+                <div>
+                  <table class="spec-table">
+                    <tbody>
+                      <tr><th>搅拌机</th><td>约 0.37–22 kW</td></tr>
+                      <tr><th>推流器</th><td>约 1.5–250 kW</td></tr>
+                      <tr><th>安装</th><td>导杆升降、池壁支座</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
-            <div>
-              <table class="spec-table">
-                <tbody>
-                  <tr><th>搅拌机功率</th><td>约 0.37–22 kW</td></tr>
-                  <tr><th>推流器功率</th><td>约 1.5–250 kW（低速系列）</td></tr>
-                  <tr><th>安装</th><td>导杆升降、池壁支座、转向角可调支架</td></tr>
-                  <tr><th>选型方法</th><td>按池型 CFD / 经验速度梯度 G 值与体积功率密度校核</td></tr>
-                </tbody>
-              </table>
+            <div class="prod-panel" id="product-af" role="tabpanel">
+              <div class="detail-head">
+                <h3>轴流泵与混流泵</h3>
+                <span class="en-title">Axial and mixed-flow</span>
+              </div>
+              <div class="detail-layout">
+                <div>
+                  <p>排涝、调水、大流量循环；立式井筒或雪橇式移动站；叶片可调拓宽高效区。</p>
+                </div>
+                <div>
+                  <table class="spec-table">
+                    <tbody>
+                      <tr><th>口径</th><td>DN350–DN1600+</td></tr>
+                      <tr><th>流量</th><td>可达数万 m³/h 级</td></tr>
+                      <tr><th>驱动</th><td>电机 / 柴油机可选</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-
-        <div class="detail-block reveal" id="product-af">
-          <div class="detail-head">
-            <h3>轴流泵与混流泵</h3>
-            <span class="en-title">Axial &amp; mixed-flow pumps · flood control &amp; circulation</span>
-          </div>
-          <div class="detail-layout">
-            <div>
-              <p>
-                面向雨水排涝、河道调水、冷却循环等大流量工况。立式井筒安装与雪橇式移动泵站均可提供；
-                叶片角度可调（动叶 / 静叶调节）以拓宽高效区。可与行星齿轮箱或低速电机直联，配合液压全调节装置实现多工况优化运行。
-              </p>
-            </div>
-            <div>
-              <table class="spec-table">
-                <tbody>
-                  <tr><th>口径</th><td>DN350–DN1600+（工程定制）</td></tr>
-                  <tr><th>流量</th><td>可达数万 m³/h 级（按装置汽蚀余量与土建限制）</td></tr>
-                  <tr><th>结构形式</th><td>立式轴流、导叶式混流、贯流式</td></tr>
-                  <tr><th>驱动</th><td>电机、柴油机应急驱动可选</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <div class="detail-block reveal" id="product-ips">
-          <div class="detail-head">
-            <h3>一体式智能泵站及泵房</h3>
-            <span class="en-title">Integrated intelligent pumping station &amp; packaged pump house</span>
-          </div>
-          <div class="detail-layout">
-            <div>
-              <p>
-                采用工厂预制筒体（玻璃钢 / 不锈钢 / 混凝土外挂板），内部集成水泵、阀门、止回、格栅除污、输送压榨、
-                通风除臭、消防与安全疏散通道。自控层集成 PLC、UPS、防雷与工业以太网交换机，可选云平台实现多泵站集群监控、
-                能耗对标与预测性维护。适用于道路立交排水、老旧小区雨污分流改造、农村污水连片整治及工业厂区雨水回收。
-              </p>
-              <p>
-                交付边界可包含：工艺 PID、BIM 配合、设备 FAT、现场 SAT、运维培训与两年备件建议清单。
-              </p>
-            </div>
-            <div>
-              <table class="spec-table">
-                <tbody>
-                  <tr><th>筒体直径</th><td>常见 φ1200–φ4500 mm（项目定制）</td></tr>
-                  <tr><th>泵台数</th><td>1–6 台（变频并联或大小泵搭配）</td></tr>
-                  <tr><th>格栅</th><td>回转式、阶梯式、粉碎性格栅可选</td></tr>
-                  <tr><th>云平台</th><td>Web/APP 告警、报表、权限分级与 API 对接</td></tr>
-                </tbody>
-              </table>
+            <div class="prod-panel" id="product-ips" role="tabpanel">
+              <div class="detail-head">
+                <h3>一体式智能泵站及泵房</h3>
+                <span class="en-title">Packaged station and pump house</span>
+              </div>
+              <div class="detail-layout">
+                <div>
+                  <p>预制筒体集成泵组、阀门、格栅、除臭与自控；云平台多站监控与报表。交付可含 PID、BIM、FAT/SAT。</p>
+                </div>
+                <div>
+                  <table class="spec-table">
+                    <tbody>
+                      <tr><th>筒径</th><td>常见 φ1200–φ4500 mm</td></tr>
+                      <tr><th>台数</th><td>1–6 台（变频并联）</td></tr>
+                      <tr><th>格栅</th><td>回转 / 阶梯 / 粉碎型</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
     </section>
 
     <section id="applications">
@@ -2114,6 +2324,61 @@
           el.classList.add("reveal-visible");
         });
       }
+
+      (function initProductTabs() {
+        var root = document.getElementById("productTabsRoot");
+        if (!root) return;
+        var tabs = root.querySelectorAll(".prod-tab");
+        var panels = root.querySelectorAll(".prod-panel");
+        function activate(id) {
+          tabs.forEach(function (t) {
+            var on = t.getAttribute("data-tab") === id;
+            t.classList.toggle("is-active", on);
+            t.setAttribute("aria-selected", on ? "true" : "false");
+          });
+          panels.forEach(function (p) {
+            p.classList.toggle("is-active", p.id === id);
+          });
+        }
+        tabs.forEach(function (tab) {
+          tab.addEventListener("click", function () {
+            activate(tab.getAttribute("data-tab"));
+          });
+        });
+        function fromHash() {
+          var h = (location.hash || "").replace(/^#/, "");
+          if (!h) return;
+          var match = Array.prototype.some.call(tabs, function (t) {
+            return t.getAttribute("data-tab") === h;
+          });
+          if (match) activate(h);
+        }
+        window.addEventListener("hashchange", fromHash);
+        fromHash();
+      })();
+
+      (function initOceanVideo() {
+        var v = document.getElementById("oceanAmbientVideo");
+        if (!v) return;
+        v.addEventListener(
+          "loadeddata",
+          function () {
+            v.classList.add("is-playing");
+          },
+          { once: true }
+        );
+        v.addEventListener("error", function () {
+          v.classList.remove("is-playing");
+        });
+        var tryPlay = function () {
+          var p = v.play();
+          if (p && typeof p.catch === "function") p.catch(function () {});
+        };
+        if (document.visibilityState === "visible") tryPlay();
+        document.addEventListener("visibilitychange", function () {
+          if (document.visibilityState === "visible") tryPlay();
+        });
+      })();
 
       function setNav(open) {
         body.classList.toggle("nav-open", open);

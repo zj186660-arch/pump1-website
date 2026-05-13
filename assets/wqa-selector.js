@@ -41,7 +41,10 @@
     if (Qd > Qmax) return -1;
     var hShut = Hn * 1.32;
     if (Qd <= Qn) {
-      return hShut + (Hn - hShut) * (Qd / Qn);
+      var hLinear = hShut + (Hn - hShut) * (Qd / Qn);
+      var hNear = Hn * (1 + 0.72 * Math.max(0, 1 - Qd / Qn));
+      hNear = Math.min(Hn * 1.35, hNear);
+      return Math.max(hLinear, hNear);
     }
     var hEnd = Hn * hEndRatio;
     var span = Qmax - Qn;
@@ -186,7 +189,7 @@
       return { ok: false, reason: "Qd 超出该型号曲线横轴合理范围" };
     }
 
-    var hEnd = relax ? 0.38 : 0.46;
+    var hEnd = relax ? 0.6 : 0.54;
     var hAt = headOnCurve(p.Q, p.H, Qd, qMax, hEnd);
     if (hAt < 0 || !isFinite(hAt)) return { ok: false, reason: "包络计算异常" };
 
@@ -200,11 +203,10 @@
     var cap = p.Q * p.H;
     var need = Qd * Hc;
     var oversize = cap / Math.max(need, 1e-6);
-    var tightScore =
-      (headMargin / Math.max(Hc, 0.5)) * 1.15 +
-      (flowMargin / Math.max(Qd, 0.5)) * 0.55 +
-      Math.max(0, Math.log(oversize / 1.35)) * 0.85 +
-      (p.P - (Pc || 0)) * 0.08;
+    var marginNorm =
+      (headMargin / Math.max(Hc, 0.5)) * 1.05 + (flowMargin / Math.max(Qd, 0.5)) * 0.38;
+    var oversizeTerm = Math.max(0, Math.log(oversize / 1.22)) * 0.42;
+    var tightScore = marginNorm + oversizeTerm;
 
     return {
       ok: true,
@@ -214,7 +216,8 @@
       headMargin: headMargin,
       flowMargin: flowMargin,
       tightScore: tightScore,
-      oversize: oversize
+      oversize: oversize,
+      powerKw: p.P
     };
   }
 
@@ -276,10 +279,10 @@
 
     candidates.sort(function (a, b) {
       if (a.ev.tier !== b.ev.tier) return a.ev.tier - b.ev.tier;
+      if (a.p.P !== b.p.P) return a.p.P - b.p.P;
       var sa = a.ev.tightScore != null ? a.ev.tightScore : 99;
       var sb = b.ev.tightScore != null ? b.ev.tightScore : 99;
-      if (Math.abs(sa - sb) > 1e-6) return sa - sb;
-      if (a.p.P !== b.p.P) return a.p.P - b.p.P;
+      if (Math.abs(sa - sb) > 1e-5) return sa - sb;
       return a.p.Q * a.p.H - b.p.Q * b.p.H;
     });
 
@@ -289,8 +292,8 @@
     var hint = "";
     if (dnFilter) hint += "<p><strong>口径提示：</strong>" + curvePageHint(dnFilter) + "</p>";
     hint +=
-      "<p class=\"wqa-select-note\">算法用铭牌 Qn、Hn 构造<strong>保守折线包络</strong>判断「是否盖住」工况点，并优先<strong>裕量适中</strong>的型号；" +
-      "若出现「无严格盖住」则会自动放宽末端下降（仍不外推超过 Qn×延伸系数）。<strong>定标请以样本曲线为准。</strong></p>";
+      "<p class=\"wqa-select-note\">在<strong>保守包络盖住</strong>工况的前提下，<strong>优先铭牌功率 kW 更低</strong>的型号（避免功率过剩），再以<strong>扬程/流量裕量与铭牌能力</strong>综合排序，贴近工况点。" +
+      "无严格盖住时再尝试放宽末端。<strong>定标请以样本曲线为准。</strong></p>";
     if (usedRelax) {
       hint +=
         "<p class=\"wqa-select-warn\"><strong>提示：</strong>严格包络下无候选，已启用<strong>放宽末端</strong>档；请优先人工对照 P23–P27。</p>";
@@ -358,7 +361,7 @@
       "</tr></thead><tbody>" +
       rows +
       "</tbody></table></div>" +
-      "<p class=\"wqa-footnote\">H<sub>包络</sub>@Qd：保守折线在需求流量处的扬程；Q<sub>max</sub>估 ≈ Qn×(1.35+30/(Qn+20))。扬程裕量 = H<sub>包络</sub>−H<sub>需求</sub>。</p>";
+      "<p class=\"wqa-footnote\">排序：<strong>先比铭牌 kW（低者优先）</strong>，再比贴合度。H<sub>包络</sub>@Qd 为保守折线（含接近额定流量段的抬高近似）；Q<sub>max</sub>估 ≈ Qn×(1.35+30/(Qn+20))。扬程裕量 = H<sub>包络</sub>−H<sub>需求</sub>。</p>";
 
     outEl.querySelectorAll(".link-model").forEach(function (btn) {
       btn.addEventListener("click", function () {
