@@ -1,171 +1,2009 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>Xizi Pump Industry | Industrial Pump Supplier</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <title>西子泵业 Xizi Pumps | 智慧流体与泵送系统解决方案</title>
+  <meta name="description" content="西子泵业（xizipumps）专注潜水排污泵、污水提升器、搅拌机推流器、轴流泵及一体式智能泵站与泵房，面向市政与工业客户提供高可靠性泵送系统。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,500;0,9..40,600&family=Noto+Sans+SC:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg-deep: #040d18;
+      --bg-panel: #0a1628;
+      --bg-soft: #eef2f8;
+      --accent: #0d7df2;
+      --accent-deep: #0558b8;
+      --accent-glow: rgba(13, 125, 242, 0.45);
+      --accent-soft: rgba(13, 125, 242, 0.14);
+      --accent-2: #e8b84a;
+      --accent-teal: #2dd4bf;
+      --text: #0f172a;
+      --text-muted: #5b6678;
+      --white: #ffffff;
+      --border: rgba(255, 255, 255, 0.09);
+      --shadow: 0 28px 70px rgba(4, 13, 24, 0.42);
+      --shadow-soft: 0 20px 50px rgba(15, 23, 42, 0.08);
+      --radius: 16px;
+      --max: 1180px;
+      --header-h: 72px;
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --font-display: "Outfit", "Noto Sans SC", system-ui, sans-serif;
+      --font-body: "Noto Sans SC", system-ui, sans-serif;
+    }
+
+    @keyframes hero-mesh {
+      0%, 100% { opacity: 1; transform: scale(1) translate(0, 0); }
+      50% { opacity: 0.85; transform: scale(1.03) translate(-1%, 1%); }
+    }
+    @keyframes blob-a {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      40% { transform: translate(8%, -6%) scale(1.08); }
+      70% { transform: translate(-5%, 4%) scale(0.96); }
+    }
+    @keyframes blob-b {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      45% { transform: translate(-10%, 8%) scale(1.06); }
+      80% { transform: translate(6%, -4%) scale(0.98); }
+    }
+    @keyframes shimmer {
+      0% { transform: translateX(-120%) skewX(-12deg); }
+      100% { transform: translateX(220%) skewX(-12deg); }
+    }
+    @keyframes ticker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    @keyframes float-y {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    @keyframes pulse-ring {
+      0%, 100% { opacity: 0.35; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.02); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .hero-blob,
+      .hero-bg::before,
+      .brand-mark,
+      .brand-mark::after,
+      .ticker-inner,
+      .hero-flow {
+        animation: none !important;
+      }
+      .hero-grid > .hero-copy,
+      .hero-grid > .hero-panel {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+      }
+      .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        transition: none !important;
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      color: #333;
-      line-height: 1.6;
+      font-family: var(--font-body);
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.65;
+      font-size: 16px;
     }
 
-    header {
-      background: #0b3d91;
-      color: white;
-      padding: 60px 20px;
-      text-align: center;
+    h1, h2, h3, h4, .hero-kicker, .eyebrow, .brand-text .cn, nav.main-nav a, .btn, .stat strong, .product-card-visual {
+      font-family: var(--font-display);
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 36px;
-    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
 
-    header p {
-      font-size: 18px;
-      opacity: 0.9;
+    /* Top bar */
+    .topbar {
+      background: var(--bg-deep);
+      color: rgba(255,255,255,0.85);
+      font-size: 13px;
+      padding: 8px 20px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px 28px;
+      border-bottom: 1px solid var(--border);
     }
-
-    .container {
-      max-width: 1100px;
-      margin: auto;
-      padding: 40px 20px;
+    .topbar a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      opacity: 0.95;
+      transition: opacity 0.2s;
     }
+    .topbar a:hover { opacity: 1; color: var(--accent-2); }
 
-    .section-title {
-      font-size: 26px;
-      margin-bottom: 20px;
-      border-left: 5px solid #0b3d91;
-      padding-left: 10px;
+    /* Header */
+    header.site-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(16px) saturate(1.2);
+      border-bottom: 1px solid transparent;
+      height: var(--header-h);
+      transition: background 0.35s var(--ease-out-expo), box-shadow 0.35s var(--ease-out-expo), border-color 0.25s;
     }
-
-    .products {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    header.site-header.is-scrolled {
+      background: rgba(255, 255, 255, 0.94);
+      border-bottom-color: rgba(15, 23, 42, 0.06);
+      box-shadow: 0 10px 40px rgba(4, 13, 24, 0.06);
+    }
+    .header-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       gap: 20px;
     }
-
-    .card {
-      border: 1px solid #ddd;
-      padding: 20px;
-      border-radius: 10px;
-      transition: 0.3s;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
     }
-
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    }
-
-    .card h3 {
-      margin-top: 0;
-      color: #0b3d91;
-    }
-
-    .about, .contact {
-      margin-top: 50px;
-    }
-
-    .contact form {
+    .brand-mark {
+      width: 46px;
+      height: 46px;
+      background: linear-gradient(135deg, var(--accent) 0%, #043d7a 50%, var(--accent-teal) 100%);
+      background-size: 200% 200%;
+      animation: brand-shift 8s ease-in-out infinite;
+      border-radius: 12px;
       display: grid;
-      gap: 10px;
-      max-width: 500px;
-    }
-
-    input, textarea {
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-
-    button {
-      background: #0b3d91;
+      place-items: center;
       color: white;
-      padding: 12px;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: -0.02em;
+      box-shadow: 0 10px 28px rgba(13, 125, 242, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+    @keyframes brand-shift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: linear-gradient(120deg, transparent 40%, rgba(255,255,255,0.35) 50%, transparent 60%);
+      animation: shimmer 4s ease-in-out infinite;
+    }
+    .brand-text .cn {
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: 0.04em;
+      color: var(--bg-deep);
+    }
+    .brand-text .en {
+      font-family: "DM Sans", sans-serif;
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    nav.main-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    nav.main-nav a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 10px;
+      position: relative;
+      transition: color 0.25s var(--ease-out-expo), background 0.25s;
+    }
+    nav.main-nav a::after {
+      content: "";
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 6px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-teal));
+      border-radius: 2px;
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 0.35s var(--ease-out-expo);
+    }
+    nav.main-nav a:hover {
+      background: var(--accent-soft);
+      color: var(--accent-deep);
+    }
+    nav.main-nav a:hover::after { transform: scaleX(1); }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
       border: none;
       cursor: pointer;
-      border-radius: 6px;
+      transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
+      font-family: inherit;
     }
-
-    button:hover {
-      background: #082c66;
+    .btn-primary {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 55%, #0369a1 100%);
+      color: white;
+      box-shadow: 0 12px 32px rgba(13, 125, 242, 0.38);
     }
+    .btn-primary::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.2) 45%, transparent 90%);
+      transform: translateX(-100%);
+      transition: transform 0.6s var(--ease-out-expo);
+    }
+    .btn-primary:hover::before { transform: translateX(100%); }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 40px rgba(13, 125, 242, 0.45);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid #d5dbe6;
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
 
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #f5f5f5;
-      margin-top: 50px;
+    .menu-toggle {
+      display: none;
+      width: 44px;
+      height: 44px;
+      border: 1px solid #d5dbe6;
+      border-radius: 10px;
+      background: white;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .menu-toggle span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--bg-deep);
+      transition: transform 0.25s, opacity 0.2s;
+    }
+    body.nav-open .menu-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    body.nav-open .menu-toggle span:nth-child(2) { opacity: 0; }
+    body.nav-open .menu-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-drawer {
+      display: none;
+      position: fixed;
+      inset: calc(var(--header-h) + 41px) 0 0 0;
+      background: white;
+      padding: 24px;
+      flex-direction: column;
+      gap: 4px;
+      overflow-y: auto;
+      border-top: 1px solid #e8ecf2;
+    }
+    body.nav-open .mobile-drawer {
+      display: flex;
+    }
+    .mobile-drawer a {
+      padding: 14px 16px;
+      border-radius: 10px;
+      font-weight: 500;
+      border: 1px solid #eef1f6;
+    }
+    .mobile-drawer a:hover { background: var(--accent-soft); color: var(--accent); }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      background: var(--bg-deep);
+      color: white;
+      overflow: hidden;
+      min-height: min(92vh, 780px);
+      display: flex;
+      align-items: center;
+      isolation: isolate;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .hero-bg::before {
+      content: "";
+      position: absolute;
+      inset: -20%;
+      background:
+        radial-gradient(ellipse 70% 55% at 75% 15%, var(--accent-glow), transparent 52%),
+        radial-gradient(ellipse 45% 40% at 12% 75%, rgba(45, 212, 191, 0.18), transparent 50%),
+        radial-gradient(ellipse 50% 50% at 50% 100%, rgba(232, 184, 74, 0.08), transparent 45%);
+      animation: hero-mesh 14s ease-in-out infinite;
+    }
+    .hero-grid-pattern {
+      position: absolute;
+      inset: 0;
+      opacity: 0.22;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(ellipse 85% 70% at 50% 40%, black 20%, transparent 75%);
+    }
+    .hero-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(72px);
+      opacity: 0.55;
+      mix-blend-mode: screen;
+    }
+    .hero-blob--1 {
+      width: min(52vw, 520px);
+      height: min(52vw, 520px);
+      background: #0d7df2;
+      top: -12%;
+      right: -8%;
+      animation: blob-a 18s ease-in-out infinite;
+    }
+    .hero-blob--2 {
+      width: min(42vw, 420px);
+      height: min(42vw, 420px);
+      background: #2dd4bf;
+      bottom: -18%;
+      left: -10%;
+      animation: blob-b 22s ease-in-out infinite;
+    }
+    .hero-flow {
+      position: absolute;
+      right: 4%;
+      top: 50%;
+      width: min(38vw, 420px);
+      height: min(38vw, 420px);
+      transform: translateY(-50%);
+      opacity: 0.35;
+      animation: float-y 6s ease-in-out infinite;
+    }
+    .hero-flow svg { width: 100%; height: 100%; }
+    .hero-wave {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      z-index: 2;
+      line-height: 0;
+      color: #ffffff;
+    }
+    .hero-wave svg {
+      width: 100%;
+      height: clamp(48px, 8vw, 88px);
+      display: block;
+    }
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 88px 24px 120px;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 48px;
+      align-items: center;
+    }
+    @media (max-width: 960px) {
+      .hero-grid { grid-template-columns: 1fr; padding: 64px 24px 100px; }
+      .hero-flow { display: none; }
+    }
+    .hero-kicker {
+      font-family: var(--font-display);
+      font-size: 12px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent-2);
+      margin-bottom: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero-kicker::before {
+      content: "";
+      width: 28px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-2), transparent);
+      border-radius: 2px;
+    }
+    .hero h1 {
+      font-size: clamp(34px, 5.2vw, 52px);
+      font-weight: 700;
+      line-height: 1.15;
+      margin: 0 0 20px;
+      letter-spacing: -0.02em;
+      color: #fff;
+      text-shadow: 0 2px 40px rgba(13, 125, 242, 0.25);
+    }
+    .hero-sub {
+      font-size: 17px;
+      color: rgba(255, 255, 255, 0.76);
+      max-width: 520px;
+      margin-bottom: 36px;
+      line-height: 1.75;
+    }
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .hero-panel {
+      background: linear-gradient(145deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: calc(var(--radius) + 4px);
+      padding: 28px;
+      backdrop-filter: blur(16px) saturate(1.3);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.12);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-panel::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
+    }
+    .hero-panel h3 {
+      margin: 0 0 18px;
       font-size: 14px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.92);
+      letter-spacing: 0.04em;
+    }
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    .stat {
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.22);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: transform 0.35s var(--ease-out-expo), border-color 0.35s, background 0.35s;
+    }
+    .hero-panel:hover .stat { border-color: rgba(255,255,255,0.12); }
+    .stat:hover {
+      transform: translateY(-3px);
+      background: rgba(13, 125, 242, 0.15);
+      border-color: rgba(13, 125, 242, 0.35);
+    }
+    .stat strong {
+      display: block;
+      font-size: 22px;
+      color: white;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+    .stat span { font-size: 12px; color: rgba(255, 255, 255, 0.62); line-height: 1.45; display: block; margin-top: 6px; }
+
+    @keyframes hero-enter {
+      from {
+        opacity: 0;
+        transform: translateY(32px);
+        filter: blur(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+      }
+    }
+    .hero-grid > .hero-copy {
+      animation: hero-enter 0.95s var(--ease-out-expo) backwards;
+    }
+    .hero-grid > .hero-panel {
+      animation: hero-enter 0.95s var(--ease-out-expo) 0.14s backwards;
+    }
+
+    /* Ticker */
+    .ticker {
+      background: linear-gradient(90deg, #071a2e, #0d2844 50%, #071a2e);
+      border-block: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden;
+      position: relative;
+    }
+    .ticker::before,
+    .ticker::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 80px;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .ticker::before {
+      left: 0;
+      background: linear-gradient(90deg, #071a2e, transparent);
+    }
+    .ticker::after {
+      right: 0;
+      background: linear-gradient(-90deg, #071a2e, transparent);
+    }
+    .ticker-inner {
+      display: flex;
+      width: max-content;
+      animation: ticker 48s linear infinite;
+    }
+    .ticker-inner:hover {
+      animation-play-state: paused;
+    }
+    .ticker-group {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      padding: 14px 48px;
+    }
+    .ticker-group span {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      white-space: nowrap;
+      color: rgba(255, 255, 255, 0.82);
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .ticker-group span::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-teal));
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      filter: blur(6px);
+      transition:
+        opacity 0.7s var(--ease-out-expo),
+        transform 0.7s var(--ease-out-expo),
+        filter 0.7s var(--ease-out-expo);
+    }
+    .reveal.reveal-visible {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.08s; }
+    .reveal-delay-2 { transition-delay: 0.16s; }
+    .reveal-delay-3 { transition-delay: 0.24s; }
+    .reveal-delay-4 { transition-delay: 0.32s; }
+    .product-grid .reveal:nth-child(1) { transition-delay: 0.04s; }
+    .product-grid .reveal:nth-child(2) { transition-delay: 0.1s; }
+    .product-grid .reveal:nth-child(3) { transition-delay: 0.16s; }
+    .product-grid .reveal:nth-child(4) { transition-delay: 0.22s; }
+    .product-grid .reveal:nth-child(5) { transition-delay: 0.28s; }
+    .app-grid .reveal:nth-child(1) { transition-delay: 0.03s; }
+    .app-grid .reveal:nth-child(2) { transition-delay: 0.08s; }
+    .app-grid .reveal:nth-child(3) { transition-delay: 0.13s; }
+    .app-grid .reveal:nth-child(4) { transition-delay: 0.18s; }
+    .app-grid .reveal:nth-child(5) { transition-delay: 0.23s; }
+    .app-grid .reveal:nth-child(6) { transition-delay: 0.28s; }
+    section {
+      padding: 96px 24px;
+      position: relative;
+    }
+    section.alt {
+      background: linear-gradient(180deg, #f0f4fa 0%, var(--bg-soft) 40%, #eef2f8 100%);
+    }
+    .section-head {
+      max-width: var(--max);
+      margin: 0 auto 52px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(28px, 3.4vw, 38px);
+      color: var(--bg-deep);
+      letter-spacing: -0.02em;
+      font-weight: 700;
+    }
+    .section-head p {
+      margin: 8px 0 0;
+      color: var(--text-muted);
+      max-width: 520px;
+    }
+    .eyebrow {
+      font-family: var(--font-display);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .container { max-width: var(--max); margin: 0 auto; }
+
+    /* Product cards */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 22px;
+    }
+    .product-card {
+      background: white;
+      border-radius: var(--radius);
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      overflow: hidden;
+      transition: box-shadow 0.45s var(--ease-out-expo), border-color 0.35s, transform 0.45s var(--ease-out-expo);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .product-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      opacity: 0;
+      box-shadow: inset 0 0 0 1px rgba(13, 125, 242, 0.35);
+      transition: opacity 0.35s;
+    }
+    .product-card:hover {
+      box-shadow: var(--shadow-soft), 0 0 0 1px rgba(13, 125, 242, 0.08);
+      border-color: rgba(13, 125, 242, 0.2);
+      transform: translateY(-8px);
+    }
+    .product-card:hover::after { opacity: 1; }
+    .product-card-visual {
+      height: 168px;
+      background: linear-gradient(145deg, #0a1f38 0%, var(--accent-deep) 55%, var(--accent) 100%);
+      background-size: 200% 200%;
+      transition: background-position 0.8s var(--ease-out-expo);
+      display: grid;
+      place-items: center;
+      color: rgba(255, 255, 255, 0.95);
+      font-size: 40px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      position: relative;
+      overflow: hidden;
+    }
+    .product-card-visual .pcv-label {
+      position: relative;
+      z-index: 1;
+    }
+    .product-card:hover .product-card-visual {
+      background-position: 100% 50%;
+    }
+    .product-card-visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 18% 22%, rgba(255,255,255,0.22), transparent 52%);
+      opacity: 0.85;
+      pointer-events: none;
+    }
+    .product-card-body { padding: 22px; flex: 1; display: flex; flex-direction: column; }
+    .product-card h3 { margin: 0 0 10px; font-size: 18px; color: var(--bg-deep); }
+    .product-card p { margin: 0 0 16px; font-size: 14px; color: var(--text-muted); flex: 1; }
+    .product-card a.link-arrow {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .product-card a.link-arrow::after {
+      content: "→";
+      transition: transform 0.2s;
+    }
+    .product-card a.link-arrow:hover::after { transform: translateX(4px); }
+
+    .product-card-visual--photo {
+      padding: 0;
+      background: #0a1628;
+    }
+    .product-card-visual--photo img {
+      width: 100%;
+      height: 100%;
+      min-height: 168px;
+      max-height: 200px;
+      object-fit: cover;
+      object-position: center center;
+    }
+
+    /* Series catalog (from 系列 PDF covers) */
+    .catalog-section {
+      margin-top: 40px;
+      padding-top: 48px;
+      border-top: 1px solid rgba(15, 23, 42, 0.08);
+    }
+    .catalog-section .mini-head {
+      margin-bottom: 28px;
+    }
+    .catalog-section .mini-head h3 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      color: var(--bg-deep);
+    }
+    .catalog-section .mini-head p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 22px;
+    }
+    .catalog-card {
+      background: white;
+      border-radius: var(--radius);
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.35s var(--ease-out-expo), transform 0.35s;
+    }
+    .catalog-card:hover {
+      box-shadow: var(--shadow-soft);
+      transform: translateY(-4px);
+    }
+    .catalog-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      object-position: center top;
+      background: #0a1628;
+    }
+    .catalog-card-body {
+      padding: 20px 22px 22px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .catalog-card-body h4 {
+      margin: 0;
+      font-size: 17px;
+      color: var(--bg-deep);
+    }
+    .catalog-card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: auto;
+    }
+    .catalog-card-actions a {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+    .catalog-card-actions a:hover { text-decoration: underline; }
+
+    /* Quote / model decoder */
+    .quote-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .quote-layout { grid-template-columns: 1fr; }
+    }
+    .quote-panel {
+      background: white;
+      border-radius: var(--radius);
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      padding: 28px;
+      box-shadow: var(--shadow-soft);
+    }
+    .quote-panel h3 { margin: 0 0 8px; font-size: 18px; color: var(--bg-deep); }
+    .quote-panel > .hint { margin: 0 0 18px; font-size: 13px; color: var(--text-muted); }
+    .quote-input-wrap { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+    .quote-input-wrap input {
+      flex: 1;
+      min-width: 200px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid #d5dbe6;
+      font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+      font-size: 15px;
+      letter-spacing: 0.02em;
+    }
+    .quote-input-wrap input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+    .decode-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+    .decode-table th,
+    .decode-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #eef1f6;
+      text-align: left;
+      vertical-align: top;
+    }
+    .decode-table th {
+      color: var(--text-muted);
+      font-weight: 500;
+      width: 38%;
+      white-space: nowrap;
+    }
+    .decode-err {
+      color: #b91c1c;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+    .quote-price-box {
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(13, 125, 242, 0.08), rgba(45, 212, 191, 0.08));
+      border: 1px dashed rgba(13, 125, 242, 0.35);
+    }
+    .quote-price-box strong { display: block; margin-bottom: 8px; color: var(--bg-deep); }
+    .quote-price-box .price-line {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent-deep);
+      letter-spacing: 0.02em;
+    }
+    .quote-price-box .price-note { font-size: 13px; color: var(--text-muted); margin-top: 10px; line-height: 1.6; }
+    .install-legend {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 16px;
+    }
+    .install-legend table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
+    .install-legend th, .install-legend td {
+      padding: 8px 10px;
+      border: 1px solid #e4e9f2;
+      text-align: left;
+    }
+    .install-legend th { background: #f0f4fa; width: 72px; }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    #catalog,
+    #quote {
+      scroll-margin-top: calc(var(--header-h) + 20px);
+    }
+
+    /* Detail blocks */
+    .detail-block {
+      margin-bottom: 80px;
+      scroll-margin-top: calc(var(--header-h) + 16px);
+      padding: 32px;
+      border-radius: calc(var(--radius) + 4px);
+      background: white;
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      box-shadow: 0 12px 40px rgba(15, 23, 42, 0.05);
+      transition: box-shadow 0.4s var(--ease-out-expo), border-color 0.35s;
+    }
+    .detail-block:hover {
+      box-shadow: 0 20px 56px rgba(13, 125, 242, 0.08);
+      border-color: rgba(13, 125, 242, 0.12);
+    }
+    .detail-block:last-child { margin-bottom: 0; }
+    .detail-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 12px 24px;
+      margin-bottom: 24px;
+      padding-bottom: 18px;
+      border-bottom: none;
+      background: linear-gradient(90deg, var(--accent), var(--accent-teal)) left bottom / 100% 3px no-repeat;
+    }
+    .detail-head h3 { margin: 0; font-size: 24px; color: var(--bg-deep); }
+    .detail-head .en-title {
+      font-family: "DM Sans", sans-serif;
+      font-size: 14px;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+    }
+    .detail-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+    @media (max-width: 900px) {
+      .detail-layout { grid-template-columns: 1fr; }
+    }
+    .detail-layout p { margin-top: 0; color: var(--text-muted); }
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .spec-table th,
+    .spec-table td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid #e4e9f2;
+    }
+    .spec-table th {
+      background: #f0f4fa;
+      color: var(--bg-deep);
+      font-weight: 600;
+      width: 38%;
+    }
+
+    /* Pillars */
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .pillar {
+      background: white;
+      padding: 28px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      box-shadow: 0 4px 24px rgba(15, 23, 42, 0.04);
+      transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s, border-color 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .pillar::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 0;
+      background: linear-gradient(180deg, var(--accent), var(--accent-teal));
+      transition: height 0.45s var(--ease-out-expo);
+      border-radius: 0 0 4px 4px;
+    }
+    .pillar:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-soft);
+      border-color: rgba(13, 125, 242, 0.15);
+    }
+    .pillar:hover::before { height: 100%; }
+    .pillar strong { display: block; font-size: 17px; margin-bottom: 10px; color: var(--bg-deep); }
+
+    /* Applications */
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    @media (max-width: 900px) { .app-grid { grid-template-columns: 1fr; } }
+    .app-tile {
+      padding: 28px;
+      border-radius: var(--radius);
+      background: linear-gradient(155deg, #0c1f38 0%, #0a2848 45%, #0d3a5c 100%);
+      color: rgba(255, 255, 255, 0.94);
+      min-height: 188px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: transform 0.45s var(--ease-out-expo), box-shadow 0.45s, border-color 0.35s;
+    }
+    .app-tile::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 80% at 100% 0%, rgba(13, 125, 242, 0.35), transparent 55%);
+      opacity: 0.5;
+      transition: opacity 0.4s, transform 0.6s var(--ease-out-expo);
+    }
+    .app-tile:hover {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 24px 50px rgba(4, 13, 24, 0.35);
+      border-color: rgba(45, 212, 191, 0.35);
+    }
+    .app-tile:hover::before {
+      opacity: 0.85;
+      transform: scale(1.08);
+    }
+    .app-tile::after {
+      content: "";
+      position: absolute;
+      right: -20px;
+      bottom: -20px;
+      width: 100px;
+      height: 100px;
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      border-radius: 50%;
+      z-index: 0;
+      animation: pulse-ring 5s ease-in-out infinite;
+    }
+    .app-tile h4 { margin: 0 0 10px; font-size: 18px; position: relative; z-index: 1; }
+    .app-tile p { margin: 0; font-size: 14px; color: rgba(255, 255, 255, 0.72); position: relative; z-index: 1; }
+
+    /* Contact */
+    .contact-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+    @media (max-width: 900px) { .contact-wrap { grid-template-columns: 1fr; } }
+    .contact-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 32px;
+      border: 1px solid #e4e9f2;
+      box-shadow: 0 16px 48px rgba(6, 20, 38, 0.08);
+    }
+    .contact-row {
+      display: flex;
+      gap: 14px;
+      padding: 16px 0;
+      border-bottom: 1px solid #eef1f6;
+      align-items: flex-start;
+    }
+    .contact-row:last-of-type { border-bottom: none; }
+    .contact-row .label { font-size: 13px; color: var(--text-muted); min-width: 72px; }
+    .contact-row .value { font-weight: 500; }
+    .contact-form label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--bg-deep);
+    }
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #d5dbe6;
+      font-family: inherit;
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+
+    /* Footer */
+    footer.site-footer {
+      background: var(--bg-deep);
+      color: rgba(255,255,255,0.72);
+      padding: 56px 24px 32px;
+      font-size: 14px;
+    }
+    .footer-grid {
+      max-width: var(--max);
+      margin: 0 auto 40px;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+    }
+    @media (max-width: 768px) {
+      .footer-grid { grid-template-columns: 1fr; }
+      nav.main-nav { display: none; }
+      .menu-toggle { display: flex; }
+      .header-actions .btn-ghost { display: none; }
+    }
+    .footer-brand .cn { font-weight: 700; font-size: 18px; color: white; }
+    .footer-brand .en {
+      font-family: "DM Sans", sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.7;
+      margin-top: 6px;
+    }
+    .footer-col h4 {
+      margin: 0 0 16px;
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+    .footer-col a {
+      display: block;
+      padding: 6px 0;
+      color: rgba(255,255,255,0.85);
+    }
+    .footer-col a:hover { color: var(--accent-2); }
+    .footer-bottom {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--bg-deep);
+      color: white;
+      padding: 14px 22px;
+      border-radius: 10px;
+      font-size: 14px;
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.35s, opacity 0.35s;
+      z-index: 2000;
+      box-shadow: var(--shadow);
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
     }
   </style>
 </head>
-
 <body>
 
-<header>
-  <h1>Xizi Pump Industry</h1>
-  <p>Professional Industrial Pump Manufacturer | Global Export to Europe, Middle East & Asia</p>
-</header>
+  <div class="topbar">
+    <a href="mailto:jason.zhang@xizipumps.com">jason.zhang@xizipumps.com</a>
+    <a href="tel:+8613401361086">+86 134 0136 1086</a>
+    <span>全球业务咨询 · Global inquiries</span>
+  </div>
 
-<div class="container">
-
-  <!-- PRODUCTS -->
-  <div>
-    <div class="section-title">Our Products</div>
-
-    <div class="products">
-      <div class="card">
-        <h3>Submersible Pump</h3>
-        <p>High efficiency, anti-clogging impeller design. Suitable for wastewater and drainage systems.</p>
-      </div>
-
-      <div class="card">
-        <h3>Multistage Pump</h3>
-        <p>CDL/CDLF vertical multistage pump for industrial water supply and pressure boosting.</p>
-      </div>
-
-      <div class="card">
-        <h3>Sewage Pump</h3>
-        <p>Heavy-duty sewage handling with strong vortex impeller and durable cast iron body.</p>
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+      <a href="#top" class="brand">
+        <div class="brand-mark">XZ</div>
+        <div class="brand-text">
+          <div class="cn">西子泵业</div>
+          <div class="en">Xizi Pumps · xizipumps</div>
+        </div>
+      </a>
+      <nav class="main-nav" aria-label="主导航">
+        <a href="#about">关于我们</a>
+        <a href="#products">产品与系统</a>
+        <a href="#catalog">系列图册</a>
+        <a href="#quote">型号报价</a>
+        <a href="#applications">应用领域</a>
+        <a href="#quality">研发与质量</a>
+        <a href="#contact">联系我们</a>
+      </nav>
+      <div class="header-actions">
+        <a class="btn btn-ghost" href="#quote">型号报价</a>
+        <a class="btn btn-primary" href="mailto:jason.zhang@xizipumps.com?subject=西子泵业%20-%20项目咨询">商务咨询</a>
+        <button type="button" class="menu-toggle" aria-label="打开菜单" aria-expanded="false" id="menuToggle">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
-  </div>
+    <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+      <a href="#about">关于我们</a>
+      <a href="#products">产品与系统</a>
+      <a href="#catalog">系列图册</a>
+      <a href="#quote">型号报价</a>
+      <a href="#applications">应用领域</a>
+      <a href="#quality">研发与质量</a>
+      <a href="#contact">联系我们</a>
+      <a class="btn btn-primary" style="margin-top:12px;text-align:center;" href="mailto:jason.zhang@xizipumps.com">发送邮件</a>
+    </div>
+  </header>
 
-  <!-- ABOUT -->
-  <div class="about">
-    <div class="section-title">About Us</div>
-    <p>
-      Xizi Pump Industry (formerly Hangzhou Submersible Pump Factory) is a professional manufacturer
-      with decades of engineering experience. Our products are exported worldwide including Europe,
-      Middle East, Southeast Asia, and South America.
-    </p>
-    <p>
-      We focus on high reliability, industrial-grade quality, and OEM customization services.
-    </p>
-  </div>
+  <main id="top">
+    <section class="hero">
+      <div class="hero-bg" aria-hidden="true">
+        <div class="hero-blob hero-blob--1"></div>
+        <div class="hero-blob hero-blob--2"></div>
+        <div class="hero-grid-pattern"></div>
+        <div class="hero-flow">
+          <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="flowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#0d7df2" stop-opacity="0.9"/>
+                <stop offset="100%" stop-color="#2dd4bf" stop-opacity="0.35"/>
+              </linearGradient>
+            </defs>
+            <path d="M20 220 C100 60 180 60 260 220 S420 380 380 200" stroke="url(#flowGrad)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+            <path d="M40 280 C140 140 220 160 320 260" stroke="url(#flowGrad)" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.45"/>
+            <circle cx="200" cy="200" r="120" stroke="rgba(255,255,255,0.08)" stroke-width="1" fill="none"/>
+            <circle cx="200" cy="200" r="80" stroke="rgba(13,125,242,0.25)" stroke-width="1" fill="none"/>
+          </svg>
+        </div>
+      </div>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="hero-kicker">Intelligent flow · 智慧流体</div>
+          <h1>以可靠泵送与系统集成<br>服务市政与工业的每一滴水流</h1>
+          <p class="hero-sub">
+            西子泵业（xizipumps）专注潜水排污泵、污水提升与搅拌推流、轴流排水及一体式智能泵站与泵房，
+            以工程化交付能力与全生命周期服务理念，对标国际一线品牌的产品定义与项目规范。
+          </p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="#products">浏览产品与系统</a>
+            <a class="btn btn-ghost" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.28);color:white;" href="#quote">型号解析</a>
+            <a class="btn btn-ghost" style="background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.92);" href="#contact">联系顾问</a>
+          </div>
+        </div>
+        <div class="hero-panel">
+          <h3>工程级交付指标（典型范围，可项目定制）</h3>
+          <div class="hero-stats">
+            <div class="stat"><strong>DN25–DN1200</strong><span>管径覆盖 / 接口形式可配</span></div>
+            <div class="stat"><strong>IP68</strong><span>潜水电机防护等级（系列化）</span></div>
+            <div class="stat"><strong>变频 &amp; 软启</strong><span>节能与电网友好型控制</span></div>
+            <div class="stat"><strong>SCADA</strong><span>泵站远程监控与告警联动</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-wave" aria-hidden="true">
+        <svg viewBox="0 0 1440 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill="currentColor" d="M0,28 C180,56 360,0 540,28 C720,56 900,0 1080,28 C1260,56 1440,8 1440,28 L1440,56 L0,56 Z"/>
+        </svg>
+      </div>
+    </section>
 
-  <!-- CONTACT -->
-  <div class="contact">
-    <div class="section-title">Contact Us</div>
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-inner">
+        <div class="ticker-group">
+          <span>一体式智能泵站</span>
+          <span>潜水排污泵 · 多材质</span>
+          <span>污水提升器</span>
+          <span>搅拌 / 推流解决方案</span>
+          <span>轴流 &amp; 混流大流量</span>
+          <span>EPC 文档与 FAT/SAT</span>
+          <span>变频节能 · 远程监控</span>
+          <span>xizipumps 全球业务</span>
+        </div>
+        <div class="ticker-group">
+          <span>一体式智能泵站</span>
+          <span>潜水排污泵 · 多材质</span>
+          <span>污水提升器</span>
+          <span>搅拌 / 推流解决方案</span>
+          <span>轴流 &amp; 混流大流量</span>
+          <span>EPC 文档与 FAT/SAT</span>
+          <span>变频节能 · 远程监控</span>
+          <span>xizipumps 全球业务</span>
+        </div>
+      </div>
+    </div>
 
-    <form>
-      <input type="text" placeholder="Your Name">
-      <input type="email" placeholder="Your Email">
-      <textarea rows="5" placeholder="Your Inquiry (e.g. pump model, flow rate, usage scenario)"></textarea>
-      <button type="button">Send Inquiry</button>
-    </form>
-  </div>
+    <section id="about">
+      <div class="section-head container reveal">
+        <div>
+          <div class="eyebrow">About Xizi Pumps</div>
+          <h2>关于西子泵业</h2>
+          <p>
+            我们面向污水处理厂、市政管网、建筑排污、河湖调水及工业废水等场景，提供从单机设备到成套泵站的一体化解决方案。
+            产品结构涵盖铸铁、不锈钢、双相钢等多种材质，满足腐蚀、磨蚀与高温介质的差异化工况。
+          </p>
+        </div>
+      </div>
+      <div class="container pillars">
+        <div class="pillar reveal">
+          <strong>系统思维，而非单机交付</strong>
+          从水力选型、土建接口、电气自控到运维备件，以总包视角降低客户多供应商协调成本。
+        </div>
+        <div class="pillar reveal reveal-delay-1">
+          <strong>材质与结构可工程化配置</strong>
+          过流部件可选耐磨涂层、双相钢或整体不锈钢，密封与轴承系统按介质含固率与温度分级选型。
+        </div>
+        <div class="pillar reveal reveal-delay-2">
+          <strong>对标国际品牌的项目语言</strong>
+          技术文档、 FAT/SAT 见证与运行手册按 EPC 与业主方审计习惯输出，便于纳入大型基建与技改框架。
+        </div>
+        <div class="pillar reveal reveal-delay-3">
+          <strong>可持续运行与节能</strong>
+          高效水力模型、变频运行策略与泵组优化调度，助力客户降低全生命周期能耗与碳足迹。
+        </div>
+      </div>
+    </section>
 
-</div>
+    <section class="alt" id="products">
+      <div class="section-head container reveal">
+        <div>
+          <div class="eyebrow">Products &amp; Systems</div>
+          <h2>产品与系统</h2>
+          <p>以下为西子泵业核心产品线概览。点击卡片可跳转至对应技术说明与典型参数表。</p>
+        </div>
+      </div>
+      <div class="container product-grid">
+        <article class="product-card reveal">
+          <div class="product-card-visual product-card-visual--photo">
+            <img src="assets/series/wqa-series.png" width="1200" height="675" alt="西子 WQA 系列潜水排污泵样本封面" loading="lazy">
+          </div>
+          <div class="product-card-body">
+            <h3>潜水排污泵系列</h3>
+            <p>多材质过流件、抗堵塞叶轮与通道式结构，适配市政与工业污水输送。卡片配图节选自英文版《Xizi Submersible Sewage Pump Series》样本首页，便于与下方型号示例对照。</p>
+            <a class="link-arrow" href="#product-wq">查看技术说明</a>
+          </div>
+        </article>
+        <article class="product-card reveal">
+          <div class="product-card-visual product-card-visual--photo">
+            <img src="assets/series/lift-series.png" width="1200" height="675" alt="西子污水提升器系列样本封面" loading="lazy">
+          </div>
+          <div class="product-card-body">
+            <h3>污水提升器</h3>
+            <p>地下空间、地铁、商业综合体等重力排水受限场景的一体化提升单元。</p>
+            <a class="link-arrow" href="#product-lift">查看技术说明</a>
+          </div>
+        </article>
+        <article class="product-card reveal">
+          <div class="product-card-visual" style="background:linear-gradient(145deg,#2a1f44,#6b4c9a 120%); background-size:200% 200%;"><span class="pcv-label">MIX</span></div>
+          <div class="product-card-body">
+            <h3>搅拌机 / 推流器</h3>
+            <p>厌氧、缺氧、好氧池混合与推流，低剪切、高能效水下搅拌解决方案。</p>
+            <a class="link-arrow" href="#product-mix">查看技术说明</a>
+          </div>
+        </article>
+        <article class="product-card reveal">
+          <div class="product-card-visual product-card-visual--photo">
+            <img src="assets/series/axial-mixed-series.png" width="1200" height="675" alt="西子潜水轴混流泵系列样本封面" loading="lazy">
+          </div>
+          <div class="product-card-body">
+            <h3>轴流泵 / 混流泵</h3>
+            <p>大流量低扬程排涝、调水与雨水泵站，兼顾汽蚀性能与装置效率。</p>
+            <a class="link-arrow" href="#product-af">查看技术说明</a>
+          </div>
+        </article>
+        <article class="product-card reveal">
+          <div class="product-card-visual" style="background:linear-gradient(145deg,#152238,#c9a227 160%); background-size:200% 200%;"><span class="pcv-label">IPS</span></div>
+          <div class="product-card-body">
+            <h3>一体式智能泵站及泵房</h3>
+            <p>工厂预制、整体吊装，集成泵组、管路、阀门、格栅、除臭与自控云平台。</p>
+            <a class="link-arrow" href="#product-ips">查看技术说明</a>
+          </div>
+        </article>
+      </div>
 
-<footer>
-  © 2026 Xizi Pump Industry. All rights reserved.
-</footer>
+      <div class="container catalog-section reveal" id="catalog">
+        <div class="mini-head">
+          <div class="eyebrow">Series brochures</div>
+          <h3>系列样本图册</h3>
+          <p>以下封面来自您提供的、文件名含「系列」的正式 PDF 样本首页（已导出为网页用图）。点击可下载或在线打开原文件。</p>
+        </div>
+        <div class="catalog-grid">
+          <article class="catalog-card">
+            <img src="assets/series/lift-series.png" width="1200" height="675" alt="西子污水提升器系列" loading="lazy">
+            <div class="catalog-card-body">
+              <h4>西子污水提升器系列</h4>
+              <p style="margin:0;font-size:13px;color:var(--text-muted);">西子污水提升器系列251203.pdf</p>
+              <div class="catalog-card-actions">
+                <a href="西子泵业资料/西子污水提升器系列251203.pdf" target="_blank" rel="noopener">打开 PDF</a>
+                <a href="#product-lift">技术说明</a>
+              </div>
+            </div>
+          </article>
+          <article class="catalog-card">
+            <img src="assets/series/axial-mixed-series.png" width="1200" height="675" alt="西子潜水轴混流泵系列" loading="lazy">
+            <div class="catalog-card-body">
+              <h4>西子潜水轴混流泵系列</h4>
+              <p style="margin:0;font-size:13px;color:var(--text-muted);">西子潜水轴混流泵系列260301.pdf（与 260301(1) 为同系列资料）</p>
+              <div class="catalog-card-actions">
+                <a href="西子泵业资料/西子潜水轴混流泵系列260301.pdf" target="_blank" rel="noopener">打开 PDF</a>
+                <a href="#product-af">技术说明</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
 
+      <div class="container" style="margin-top:64px;">
+        <div class="detail-block reveal" id="product-wq">
+          <div class="detail-head">
+            <h3>潜水排污泵（多材质）</h3>
+            <span class="en-title">Submersible sewage pumps · WQ / WQ-H / stainless &amp; duplex options</span>
+          </div>
+          <div class="detail-layout">
+            <div>
+              <p>
+                适用于输送城市生活污水、工业废水及含固体颗粒与纤维的介质。叶轮型式包括单通道、双通道、旋流式与切割式，
+                可通过水力模型匹配防缠绕与通过能力。过流材质可选灰铸铁、球墨铸铁、304/316L 不锈钢及双相钢，
+                密封系统按介质温度与含固率配置单端面机械密封、双端面机械密封或集装式密封，并可选泄漏监测与轴承温升保护。
+              </p>
+              <p>
+                <strong>型号示例（西子口径）：</strong><code style="background:#f0f4fa;padding:2px 8px;border-radius:6px;font-size:13px;">150WQA150-21-15-4P-Z</code>
+                — 依次为排出口径（mm）、系列代号（如 WQA）、额定流量（m³/h）、额定扬程（m）、电机功率（kW）、电机极数（如 4P）、安装方式代号（Z 为自动耦合式等）。
+                可在下方 <a href="#quote">「型号报价」</a> 中实时解析并生成询价摘要。
+              </p>
+              <p>
+                典型配套：不锈钢导杆自动耦合装置、出水弯管、双导轨起吊系统；控制侧支持直接启动、星三角、软启动与变频器。
+              </p>
+            </div>
+            <div>
+              <table class="spec-table">
+                <tbody>
+                  <tr><th>口径 / Outlet</th><td>DN50–DN600（可扩展至更大口径项目定制）</td></tr>
+                  <tr><th>流量 / Flow</th><td>约 5–5500 m³/h（按系列与电机配置）</td></tr>
+                  <tr><th>扬程 / Head</th><td>约 5–100 m</td></tr>
+                  <tr><th>介质温度</th><td>常规 ≤40 °C；高温型可达 ≤80 °C（选型确认）</td></tr>
+                  <tr><th>电机</th><td>IE3 效率等级（可按项目指定 IE4 / 防爆）</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-block reveal" id="product-lift">
+          <div class="detail-head">
+            <h3>污水提升器</h3>
+            <span class="en-title">Sewage lifting stations · PE / GRP tank · duplex pump logic</span>
+          </div>
+          <div class="detail-layout">
+            <div>
+              <p>
+                针对无法重力排入市政管网的场景，提供单泵或双泵互备提升单元。箱体可选聚乙烯滚塑或玻璃钢材质，
+                内置液位浮球/投入式液位计、止回阀、闸阀及通气管路；双泵系统具备轮换运行、故障切换与高液位报警。
+                可集成切割泵或通道泵以应对卫生巾、纤维类缠绕物。
+              </p>
+            </div>
+            <div>
+              <table class="spec-table">
+                <tbody>
+                  <tr><th>有效容积</th><td>约 60–3000 L（按停留时间与峰值流量计算）</td></tr>
+                  <tr><th>安装方式</th><td>地面式 / 地埋式 / 夹层式</td></tr>
+                  <tr><th>控制</th><td>PLC 或专用控制器；可选 GSM 短信 / 4G 远程报警</td></tr>
+                  <tr><th>标准与认证</th><td>按项目目标市场协助整理 CE / 国内质检等符合性文件</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-block reveal" id="product-mix">
+          <div class="detail-head">
+            <h3>潜水搅拌机与推流器</h3>
+            <span class="en-title">Submersible mixers &amp; flow promoters</span>
+          </div>
+          <div class="detail-layout">
+            <div>
+              <p>
+                用于生物处理池内泥水混合、固体悬浮与推流，防止沉积。推流器采用低速大叶轮设计，配合安装导杆与转向角可调底座，
+                改善流场分布并降低能耗。电机 F 级绝缘，标配过热与泄漏保护；不锈钢或环氧涂层叶轮适应腐蚀性环境。
+              </p>
+            </div>
+            <div>
+              <table class="spec-table">
+                <tbody>
+                  <tr><th>搅拌机功率</th><td>约 0.37–22 kW</td></tr>
+                  <tr><th>推流器功率</th><td>约 1.5–250 kW（低速系列）</td></tr>
+                  <tr><th>安装</th><td>导杆升降、池壁支座、转向角可调支架</td></tr>
+                  <tr><th>选型方法</th><td>按池型 CFD / 经验速度梯度 G 值与体积功率密度校核</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-block reveal" id="product-af">
+          <div class="detail-head">
+            <h3>轴流泵与混流泵</h3>
+            <span class="en-title">Axial &amp; mixed-flow pumps · flood control &amp; circulation</span>
+          </div>
+          <div class="detail-layout">
+            <div>
+              <p>
+                面向雨水排涝、河道调水、冷却循环等大流量工况。立式井筒安装与雪橇式移动泵站均可提供；
+                叶片角度可调（动叶 / 静叶调节）以拓宽高效区。可与行星齿轮箱或低速电机直联，配合液压全调节装置实现多工况优化运行。
+              </p>
+            </div>
+            <div>
+              <table class="spec-table">
+                <tbody>
+                  <tr><th>口径</th><td>DN350–DN1600+（工程定制）</td></tr>
+                  <tr><th>流量</th><td>可达数万 m³/h 级（按装置汽蚀余量与土建限制）</td></tr>
+                  <tr><th>结构形式</th><td>立式轴流、导叶式混流、贯流式</td></tr>
+                  <tr><th>驱动</th><td>电机、柴油机应急驱动可选</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-block reveal" id="product-ips">
+          <div class="detail-head">
+            <h3>一体式智能泵站及泵房</h3>
+            <span class="en-title">Integrated intelligent pumping station &amp; packaged pump house</span>
+          </div>
+          <div class="detail-layout">
+            <div>
+              <p>
+                采用工厂预制筒体（玻璃钢 / 不锈钢 / 混凝土外挂板），内部集成水泵、阀门、止回、格栅除污、输送压榨、
+                通风除臭、消防与安全疏散通道。自控层集成 PLC、UPS、防雷与工业以太网交换机，可选云平台实现多泵站集群监控、
+                能耗对标与预测性维护。适用于道路立交排水、老旧小区雨污分流改造、农村污水连片整治及工业厂区雨水回收。
+              </p>
+              <p>
+                交付边界可包含：工艺 PID、BIM 配合、设备 FAT、现场 SAT、运维培训与两年备件建议清单。
+              </p>
+            </div>
+            <div>
+              <table class="spec-table">
+                <tbody>
+                  <tr><th>筒体直径</th><td>常见 φ1200–φ4500 mm（项目定制）</td></tr>
+                  <tr><th>泵台数</th><td>1–6 台（变频并联或大小泵搭配）</td></tr>
+                  <tr><th>格栅</th><td>回转式、阶梯式、粉碎性格栅可选</td></tr>
+                  <tr><th>云平台</th><td>Web/APP 告警、报表、权限分级与 API 对接</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="applications">
+      <div class="section-head container reveal">
+        <div>
+          <div class="eyebrow">Applications</div>
+          <h2>应用领域</h2>
+          <p>与全球领先泵企相似的七大方向划分，便于设计院与总包方快速映射产品族与业绩类型。</p>
+        </div>
+      </div>
+      <div class="container app-grid">
+        <div class="app-tile reveal">
+          <h4>市政与水务基础设施</h4>
+          <p>污水厂进出水、中途提升、合流制溢流调蓄、再生水回用泵站。</p>
+        </div>
+        <div class="app-tile reveal">
+          <h4>建筑与地下空间</h4>
+          <p>地铁、隧道、地下车库、商业综合体污水提升与雨水截流。</p>
+        </div>
+        <div class="app-tile reveal">
+          <h4>工业与园区配套</h4>
+          <p>化工、食品、造纸、印染等废水预处理与总排口提升。</p>
+        </div>
+        <div class="app-tile reveal">
+          <h4>水利与排涝减灾</h4>
+          <p>城市内涝治理、圩区排涝、河湖生态修复调水。</p>
+        </div>
+        <div class="app-tile reveal">
+          <h4>能源与电力</h4>
+          <p>循环冷却、雨水排放、事故油池与含油废水提升（防爆选型）。</p>
+        </div>
+        <div class="app-tile reveal">
+          <h4>农业农村环境治理</h4>
+          <p>连片整治一体化泵站、灌溉排水两用轴流泵组。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="alt" id="quality">
+      <div class="section-head container reveal">
+        <div>
+          <div class="eyebrow">R&amp;D · Quality · Service</div>
+          <h2>研发、质量与服务</h2>
+          <p>以可审计的流程与可追溯的制造记录，支撑重大项目投标与业主验收。</p>
+        </div>
+      </div>
+      <div class="container pillars">
+        <div class="pillar reveal">
+          <strong>水力研发与试验</strong>
+          闭式试验台完成特性曲线标定，汽蚀、振动与噪声测试可按客户见证大纲执行。
+        </div>
+        <div class="pillar reveal reveal-delay-1">
+          <strong>供应链与检验</strong>
+          铸件 UT/MT、轴类硬度与跳动、装配气密与干运转检查，关键序列号绑定试验报告。
+        </div>
+        <div class="pillar reveal reveal-delay-2">
+          <strong>现场服务</strong>
+          指导安装调试、叶轮再平衡、预防性检修与远程诊断，缩短非计划停机时间。
+        </div>
+        <div class="pillar reveal reveal-delay-3">
+          <strong>文档与培训</strong>
+          中英文运行维护手册、备件互换表、HAZOP 配合说明与安全标识包。
+        </div>
+      </div>
+    </section>
+
+    <section class="alt" id="quote">
+      <div class="section-head container reveal">
+        <div>
+          <div class="eyebrow">Live quote · 型号解析</div>
+          <h2>型号实时解析与报价（价格规则待接入）</h2>
+          <p>
+            已定位贵司《价格表2026.3定稿.pdf》。当前页面可<strong>实时拆解型号</strong>并生成询价邮件正文；
+            具体单价将按您后续提供的价格计算逻辑与价格表对接后在此显示。
+          </p>
+        </div>
+      </div>
+      <div class="container quote-layout">
+        <div class="quote-panel reveal">
+          <h3>输入完整型号</h3>
+          <p class="hint">示例：<strong>150WQA150-21-15-4P-Z</strong>（大小写不敏感，可含空格）</p>
+          <div class="quote-input-wrap">
+            <input type="text" id="modelInput" placeholder="150WQA150-21-15-4P-Z" autocomplete="off" spellcheck="false" maxlength="120">
+            <button type="button" class="btn btn-primary" id="modelParseBtn">解析</button>
+          </div>
+          <div id="modelErr" class="decode-err" style="display:none;"></div>
+          <table class="decode-table" id="decodeTable" style="display:none;">
+            <tbody id="decodeBody"></tbody>
+          </table>
+          <div class="install-legend">
+            <strong style="color:var(--bg-deep);font-size:14px;">安装方式代号（西子已确认项）</strong>
+            <table>
+              <tr><th>Z</th><td>自动耦合式安装（导轨 + 耦合装置）</td></tr>
+              <tr><th>Y</th><td>硬管移动式安装</td></tr>
+              <tr><th>其他</th><td>更多代号请贵司补充后，我可一并写入本表并参与解析。</td></tr>
+            </table>
+          </div>
+        </div>
+        <div class="quote-panel reveal reveal-delay-1">
+          <h3>报价输出</h3>
+          <p class="hint">《价格表2026.3定稿》已收录于资料库，点击下方可在新窗口打开核对。</p>
+          <div class="quote-price-box">
+            <strong>系统参考价</strong>
+            <div class="price-line" id="priceDisplay">— 待接入 —</div>
+            <p class="price-note">
+              下一步：您说明价格表中的<strong>计价维度</strong>（例如按型号区间、材质加价、安装方式加价、税率/币种等），我会把计算规则写成前端逻辑或对接表格数据，此处即可显示实时金额。
+            </p>
+            <a class="btn btn-ghost" style="margin-top:12px;" href="西子泵业资料/价格表2026.3定稿.pdf" target="_blank" rel="noopener">打开《价格表2026.3定稿》PDF</a>
+          </div>
+          <p class="hint" style="margin-top:18px;">将解析结果一键带入邮件：</p>
+          <button type="button" class="btn btn-primary" style="width:100%;" id="mailQuoteBtn" disabled>发送型号询价邮件</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="section-head container reveal">
+        <div>
+          <div class="eyebrow">Contact</div>
+          <h2>联系我们</h2>
+          <p>销售与技术顾问：Jason Zhang。欢迎发送工况参数（流量、扬程、介质、安装方式、电气标准），我们将在 1–2 个工作日内回复方案建议。</p>
+        </div>
+      </div>
+      <div class="container contact-wrap">
+        <div class="contact-card reveal reveal-delay-1">
+          <h3 style="margin-top:0;color:var(--bg-deep);">西子泵业 Xizi Pumps</h3>
+          <div class="contact-row">
+            <span class="label">品牌</span>
+            <span class="value">西子泵业 · xizipumps</span>
+          </div>
+          <div class="contact-row">
+            <span class="label">邮箱</span>
+            <span class="value"><a href="mailto:jason.zhang@xizipumps.com">jason.zhang@xizipumps.com</a></span>
+          </div>
+          <div class="contact-row">
+            <span class="label">手机</span>
+            <span class="value"><a href="tel:+8613401361086">+86 134 0136 1086</a></span>
+          </div>
+          <div class="contact-row">
+            <span class="label">商务</span>
+            <span class="value">OEM / ODM、EPC 配套、海外分销合作</span>
+          </div>
+        </div>
+        <div class="contact-card contact-form reveal reveal-delay-2">
+          <h3 style="margin-top:0;color:var(--bg-deep);">在线留言</h3>
+          <p style="margin-top:0;font-size:14px;color:var(--text-muted);">提交后将为您打开邮件客户端；若未安装邮件程序，请直接复制上方邮箱地址。</p>
+          <form id="inquiryForm">
+            <label for="name">姓名 / Name</label>
+            <input id="name" name="name" type="text" autocomplete="name" placeholder="您的姓名" required>
+            <label for="company">公司 / Organization</label>
+            <input id="company" name="company" type="text" autocomplete="organization" placeholder="公司或项目名称">
+            <label for="email">邮箱 / Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="用于回复的邮箱" required>
+            <label for="message">需求描述</label>
+            <textarea id="message" name="message" placeholder="例：潜水排污泵，流量 400 m³/h，扬程 18 m，介质为市政污水，需变频与远程监控。" required></textarea>
+            <button type="submit" class="btn btn-primary" style="width:100%;">发送询价邮件</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="cn">西子泵业</div>
+        <div class="en">Xizi Pumps · xizipumps</div>
+        <p style="margin-top:16px;max-width:360px;line-height:1.7;">
+          潜水排污泵、污水提升器、搅拌机推流器、轴流泵及一体式智能泵站与泵房 — 智慧流体，可靠运行。
+        </p>
+      </div>
+      <div class="footer-col">
+        <h4>导航</h4>
+        <a href="#about">关于我们</a>
+        <a href="#products">产品与系统</a>
+        <a href="#catalog">系列图册</a>
+        <a href="#quote">型号报价</a>
+        <a href="#applications">应用领域</a>
+        <a href="#quality">研发与质量</a>
+        <a href="#contact">联系我们</a>
+      </div>
+      <div class="footer-col">
+        <h4>联系</h4>
+        <a href="mailto:jason.zhang@xizipumps.com">jason.zhang@xizipumps.com</a>
+        <a href="tel:+8613401361086">+86 134 0136 1086</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © <span id="year"></span> 西子泵业 Xizi Pumps（xizipumps）. All rights reserved.
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    (function () {
+      var y = document.getElementById("year");
+      if (y) y.textContent = new Date().getFullYear();
+
+      var body = document.body;
+      var toggle = document.getElementById("menuToggle");
+      var drawer = document.getElementById("mobileDrawer");
+      var siteHeader = document.getElementById("siteHeader");
+
+      function onScroll() {
+        if (siteHeader) siteHeader.classList.toggle("is-scrolled", window.scrollY > 20);
+      }
+      onScroll();
+      window.addEventListener("scroll", onScroll, { passive: true });
+
+      var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!reduceMotion) {
+        var io = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("reveal-visible");
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.1, rootMargin: "0px 0px -6% 0px" }
+        );
+        document.querySelectorAll(".reveal").forEach(function (el) {
+          io.observe(el);
+        });
+      } else {
+        document.querySelectorAll(".reveal").forEach(function (el) {
+          el.classList.add("reveal-visible");
+        });
+      }
+
+      function setNav(open) {
+        body.classList.toggle("nav-open", open);
+        if (drawer) drawer.setAttribute("aria-hidden", open ? "false" : "true");
+        if (toggle) toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      }
+
+      if (toggle) {
+        toggle.addEventListener("click", function () {
+          setNav(!body.classList.contains("nav-open"));
+        });
+      }
+
+      document.querySelectorAll(".mobile-drawer a").forEach(function (a) {
+        a.addEventListener("click", function () { setNav(false); });
+      });
+
+      /* ----- 型号解析 / 询价摘要（价格规则待接入） ----- */
+      var SERIES_DESC = {
+        WQA: "WQA 系列潜水排污泵",
+        WQ: "WQ 系列潜水排污泵",
+        WQN: "WQN 系列潜水排污泵",
+        WQR: "WQR 系列（定义以西子样本为准）",
+        WQB: "WQB 系列隔爆型（定义以西子样本为准）"
+      };
+      var INSTALL = {
+        Z: "自动耦合式安装（导轨 + 耦合装置）",
+        Y: "硬管移动式安装"
+      };
+
+      var modelInput = document.getElementById("modelInput");
+      var modelErr = document.getElementById("modelErr");
+      var decodeTable = document.getElementById("decodeTable");
+      var decodeBody = document.getElementById("decodeBody");
+      var modelParseBtn = document.getElementById("modelParseBtn");
+      var mailQuoteBtn = document.getElementById("mailQuoteBtn");
+      var lastParse = null;
+
+      function parseXiziModel(raw) {
+        var s = String(raw || "").replace(/\s+/g, "").toUpperCase();
+        if (!s) return { ok: false, error: "请输入完整型号。" };
+        var re = /^(\d+)([A-Z]{2,10})(\d+(?:\.\d+)?)-(\d+(?:\.\d+)?)-(\d+(?:\.\d+)?)-(\d+P)(?:-(.+))?$/;
+        var m = s.match(re);
+        if (!m) {
+          return {
+            ok: false,
+            error: "未识别格式。请核对分段与连字符。示例：150WQA150-21-15-4P-Z",
+            raw: raw
+          };
+        }
+        var dn = m[1];
+        var series = m[2];
+        var flow = m[3];
+        var head = m[4];
+        var power = m[5];
+        var poles = m[6];
+        var tail = (m[7] || "").trim();
+        var seriesLong = SERIES_DESC[series] || series + " 系列（请对照西子样本确认全称）";
+        var installLines = [];
+        if (!tail) {
+          installLines.push("未标注安装方式尾缀（Z、Y 等为常见安装代号，可省略）");
+        } else {
+          tail.split("-").forEach(function (seg) {
+            seg = String(seg || "").trim();
+            if (!seg) return;
+            if (INSTALL[seg]) installLines.push(INSTALL[seg]);
+            else {
+              var parts = [];
+              for (var i = 0; i < seg.length; i++) {
+                var ch = seg.charAt(i);
+                if (INSTALL[ch]) parts.push(INSTALL[ch]);
+                else parts.push("代号 “" + ch + "”（请向西子确认）");
+              }
+              installLines.push(parts.join("；"));
+            }
+          });
+        }
+        return {
+          ok: true,
+          raw: raw.trim(),
+          normalized: s,
+          outletMm: dn,
+          outletDn: "DN" + dn,
+          series: series,
+          seriesLong: seriesLong,
+          flowM3h: flow,
+          headM: head,
+          powerKw: power,
+          poles: poles,
+          installText: installLines.join("\n")
+        };
+      }
+
+      function renderDecode(p) {
+        decodeBody.innerHTML = "";
+        function row(label, value) {
+          var tr = document.createElement("tr");
+          var th = document.createElement("th");
+          th.textContent = label;
+          var td = document.createElement("td");
+          td.textContent = value;
+          tr.appendChild(th);
+          tr.appendChild(td);
+          decodeBody.appendChild(tr);
+        }
+        row("完整型号", p.raw);
+        row("排出口径", p.outletDn + "（型号首位数字段，单位 mm）");
+        row("系列代号", p.series + " — " + p.seriesLong);
+        row("额定流量", p.flowM3h + " m³/h");
+        row("额定扬程", p.headM + " m");
+        row("电机功率", p.powerKw + " kW");
+        row("电机极数", p.poles + "（同步转速请以铭牌 / 样本为准）");
+        row("安装方式", p.installText);
+      }
+
+      function runParse() {
+        var p = parseXiziModel(modelInput ? modelInput.value : "");
+        lastParse = p.ok ? p : null;
+        if (!p.ok) {
+          modelErr.style.display = "block";
+          modelErr.textContent = p.error;
+          decodeTable.style.display = "none";
+          if (mailQuoteBtn) mailQuoteBtn.disabled = true;
+          return;
+        }
+        modelErr.style.display = "none";
+        decodeTable.style.display = "table";
+        renderDecode(p);
+        if (mailQuoteBtn) mailQuoteBtn.disabled = false;
+      }
+
+      if (modelParseBtn) modelParseBtn.addEventListener("click", runParse);
+
+      if (modelInput) {
+        var tmr = null;
+        modelInput.addEventListener("input", function () {
+          if (tmr) clearTimeout(tmr);
+          tmr = setTimeout(runParse, 280);
+        });
+        modelInput.addEventListener("keydown", function (ev) {
+          if (ev.key === "Enter") {
+            ev.preventDefault();
+            runParse();
+          }
+        });
+      }
+
+      if (mailQuoteBtn) {
+        mailQuoteBtn.addEventListener("click", function () {
+          if (!lastParse || !lastParse.ok) return;
+          var p = lastParse;
+          var bodyLines = [
+            "【西子泵业 · 型号询价】",
+            "完整型号：" + p.raw,
+            "排出口径：" + p.outletDn,
+            "系列：" + p.seriesLong,
+            "流量：" + p.flowM3h + " m³/h",
+            "扬程：" + p.headM + " m",
+            "电机功率：" + p.powerKw + " kW",
+            "极数：" + p.poles,
+            "安装方式说明：",
+            p.installText,
+            "",
+            "请按《价格表2026.3定稿》给出正式报价（含税/出厂条款请注明）。"
+          ];
+          var subject = encodeURIComponent("型号询价 " + p.normalized);
+          var body = encodeURIComponent(bodyLines.join("\n"));
+          window.location.href =
+            "mailto:jason.zhang@xizipumps.com?subject=" + subject + "&body=" + body;
+        });
+      }
+
+      document.getElementById("inquiryForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var name = document.getElementById("name").value.trim();
+        var company = document.getElementById("company").value.trim();
+        var email = document.getElementById("email").value.trim();
+        var message = document.getElementById("message").value.trim();
+        var subject = encodeURIComponent("西子泵业 - 询价 / Inquiry from " + (name || "web"));
+        var bodyText = encodeURIComponent(
+          "姓名 / Name: " + name + "\n" +
+          "公司 / Org: " + company + "\n" +
+          "发件人邮箱 / Reply-To: " + email + "\n\n" +
+          "需求描述:\n" + message
+        );
+        window.location.href = "mailto:jason.zhang@xizipumps.com?subject=" + subject + "&body=" + bodyText;
+        var toast = document.getElementById("toast");
+        toast.textContent = "已唤起邮件客户端；若未弹出，请手动发送至 jason.zhang@xizipumps.com";
+        toast.classList.add("show");
+        setTimeout(function () { toast.classList.remove("show"); }, 4500);
+      });
+    })();
+  </script>
 </body>
 </html>
