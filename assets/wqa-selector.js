@@ -63,6 +63,10 @@
     return d.wqa || {};
   }
 
+  /** 价格表 wqa 对象引用不变时复用目录，避免每次筛选全表扫描 */
+  var catalogCacheRef = null;
+  var catalogCacheList = null;
+
   function parseWqaModel(model) {
     var s = String(model || "")
       .replace(/\s+/g, "")
@@ -80,11 +84,14 @@
 
   function buildCatalog() {
     var rows = getWqaRows();
+    if (catalogCacheRef === rows && catalogCacheList) return catalogCacheList;
     var list = [];
     Object.keys(rows).forEach(function (k) {
       var p = parseWqaModel(k);
       if (p) list.push(p);
     });
+    catalogCacheRef = rows;
+    catalogCacheList = list;
     return list;
   }
 
@@ -239,24 +246,25 @@
     var outEl = document.getElementById("wqaSelectResults");
     if (!outEl) return;
 
+    var elOutlet = document.getElementById("selOutlet");
+    var elQ = document.getElementById("selQ");
+    var elQUnit = document.getElementById("selQUnit");
+    var elH = document.getElementById("selH");
+    var elP = document.getElementById("selP");
+    var elPUnit = document.getElementById("selPUnit");
+
     var cat = buildCatalog();
     if (!cat.length) {
       outEl.innerHTML = "<p>未加载价格表数据，请确认已引入 <code>assets/price-data.js</code>。</p>";
       return;
     }
 
-    var dnFilter = parseOutletToDn(document.getElementById("selOutlet") && document.getElementById("selOutlet").value);
-    var Qc = parseFlowToM3h(
-      document.getElementById("selQ") && document.getElementById("selQ").value,
-      document.getElementById("selQUnit") && document.getElementById("selQUnit").value
-    );
-    var Hc = Number(document.getElementById("selH") && document.getElementById("selH").value);
+    var dnFilter = parseOutletToDn(elOutlet && elOutlet.value);
+    var Qc = parseFlowToM3h(elQ && elQ.value, elQUnit && elQUnit.value);
+    var Hc = Number(elH && elH.value);
     if (!isFinite(Hc) || Hc < 0) Hc = null;
 
-    var Pc = parsePowerToKw(
-      document.getElementById("selP") && document.getElementById("selP").value,
-      document.getElementById("selPUnit") && document.getElementById("selPUnit").value
-    );
+    var Pc = parsePowerToKw(elP && elP.value, elPUnit && elPUnit.value);
 
     var hasQ = Qc != null && Qc > 0;
     var hasH = Hc != null && Hc > 0;
@@ -368,18 +376,38 @@
       rows +
       "</tbody></table></div>" +
       "<p class=\"wqa-footnote\">排序：<strong>先比铭牌 kW（低者优先）</strong>，再比贴合度。H<sub>包络</sub> 在 Q&gt;Qn 段为<strong>凸曲线</strong>下降（较线性更贴近真实曲线形态）。Q<sub>max</sub>估 ≈ Qn×(1.35+30/(Qn+20))。</p>";
-
-    outEl.querySelectorAll(".link-model").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        var m = btn.getAttribute("data-m");
-        if (typeof window.XIZI_fillQuoteModel === "function") window.XIZI_fillQuoteModel(m);
-      });
-    });
   }
 
   function init() {
     var btn = document.getElementById("wqaSelectRun");
     if (btn) btn.addEventListener("click", runSelection);
+
+    var wqaSection = document.getElementById("select-wqa");
+    if (wqaSection) {
+      wqaSection.addEventListener("click", function (ev) {
+        var t = ev.target;
+        if (!t || !t.closest) return;
+        var link = t.closest(".link-model");
+        if (!link || !wqaSection.contains(link)) return;
+        var m = link.getAttribute("data-m");
+        if (m && typeof window.XIZI_fillQuoteModel === "function") window.XIZI_fillQuoteModel(m);
+      });
+    }
+
+    function bindEnterRun(id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener("keydown", function (ev) {
+        if (ev.key !== "Enter") return;
+        ev.preventDefault();
+        runSelection();
+      });
+    }
+    ["selOutlet", "selQ", "selH", "selP"].forEach(bindEnterRun);
+    var elQUnit = document.getElementById("selQUnit");
+    var elPUnit = document.getElementById("selPUnit");
+    if (elQUnit) elQUnit.addEventListener("change", runSelection);
+    if (elPUnit) elPUnit.addEventListener("change", runSelection);
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);

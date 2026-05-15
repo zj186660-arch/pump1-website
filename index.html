@@ -1275,6 +1275,16 @@
       background: rgba(15, 23, 42, 0.06);
       color: var(--text-muted);
     }
+    section#select-wqa #selOutlet.wqa-input-outlet {
+      flex: 1;
+      max-width: 240px;
+    }
+    section#select-wqa input.wqa-input-num {
+      width: 120px;
+    }
+    #wqaSelectResults.wqa-select-results {
+      white-space: normal;
+    }
     .quote-input-wrap { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
     .quote-input-wrap input {
       flex: 1;
@@ -2255,11 +2265,11 @@
           <div class="quote-controls">
             <div class="quote-row">
               <span class="label">排出口径</span>
-              <input type="text" id="selOutlet" placeholder="如 DN65 / 2英寸 / 留空" style="flex:1;max-width:240px;">
+              <input type="text" id="selOutlet" class="wqa-input-outlet" placeholder="如 DN65 / 2英寸 / 留空" autocomplete="off">
             </div>
             <div class="quote-row">
               <span class="label">流量</span>
-              <input type="number" id="selQ" min="0" step="any" placeholder="可选" style="width:120px;">
+              <input type="number" id="selQ" class="wqa-input-num" min="0" step="any" placeholder="可选">
               <select id="selQUnit">
                 <option value="m3h" selected>m³/h</option>
                 <option value="ls">L/s</option>
@@ -2271,11 +2281,11 @@
             </div>
             <div class="quote-row">
               <span class="label">扬程 (m)</span>
-              <input type="number" id="selH" min="0" step="any" placeholder="可选" style="width:120px;">
+              <input type="number" id="selH" class="wqa-input-num" min="0" step="any" placeholder="可选">
             </div>
             <div class="quote-row">
               <span class="label">电机功率</span>
-              <input type="number" id="selP" min="0" step="any" placeholder="可选" style="width:120px;">
+              <input type="number" id="selP" class="wqa-input-num" min="0" step="any" placeholder="可选">
               <select id="selPUnit">
                 <option value="kw" selected>kW</option>
                 <option value="hp">hp</option>
@@ -2289,7 +2299,7 @@
         <div class="quote-panel reveal reveal-delay-1">
           <h3>候选列表</h3>
           <p class="hint">结果按<strong>盖住工况 + 贴切度</strong>排序（扬程裕量、流量延伸余量、功率与铭牌能力综合）；无严格盖住时再尝试略放宽末端。点击型号可在「型号报价」中试算。</p>
-          <div id="wqaSelectResults" class="hint" style="white-space:normal;">请填写至少扬程或流量之一后点击「筛选」。</div>
+          <div id="wqaSelectResults" class="hint wqa-select-results">请填写至少扬程或流量之一后点击「筛选」。</div>
         </div>
       </div>
     </section>
