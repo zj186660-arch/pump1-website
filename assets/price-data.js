@@ -1083,9 +1083,10 @@ window.__XIZI_PRICE_DATA__ = {
       "impeller_ht200": 1618.0,
       "impeller_304": 6450.0,
       "cable_9m": 1888.0,
-      "seal_std": 3870.0,
-      "bearing_std": 5312.0,
-      "bearing_nsk": 1219.0,
+      "seal_std": 1431.0,
+      "seal_burgmann": 2437.0,
+      "bearing_std": 584.0,
+      "bearing_nsk": 1727.0,
       "bearing_skf": 1751.0,
       "full_warranty": 1431.0
     },

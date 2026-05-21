@@ -2366,11 +2366,11 @@
             </div>
             <div class="quote-row">
               <span class="label">机封升级</span>
-              <span style="font-size:12px;color:var(--text-muted);max-width:280px;">博格曼等：填写《价格表》中该机封<strong>面价</strong>，系统按「机封面价−标配机封面价」计入（与轴承差价逻辑相同）。</span>
+              <span style="font-size:12px;color:var(--text-muted);max-width:280px;">优先自动读取《价格表》该规格对应机封面价（如博格曼）；也可手填覆盖，系统按「机封面价−标配机封面价」计入。</span>
             </div>
             <div class="quote-row">
               <span class="label">博格曼面价</span>
-              <input type="number" id="qBurgFace" min="0" step="1" placeholder="可选，如表列博格曼价" style="width:160px;">
+              <input type="number" id="qBurgFace" min="0" step="1" placeholder="可选，留空则优先用表内对应机封价" style="width:220px;">
             </div>
             <div class="quote-row">
               <span class="label">电缆长度 (m)</span>
@@ -2850,12 +2850,14 @@
 
         var sealDiff = 0;
         var burgRaw = qBurgFace && qBurgFace.value ? Number(qBurgFace.value) : NaN;
-        if (isFinite(burgRaw) && burgRaw > 0 && row && row.seal_std != null) {
-          sealDiff = burgRaw - Number(row.seal_std);
+        var autoSeal = row && row.seal_burgmann != null ? Number(row.seal_burgmann) : NaN;
+        var useSeal = isFinite(burgRaw) && burgRaw > 0 ? burgRaw : autoSeal;
+        if (isFinite(useSeal) && useSeal > 0 && row && row.seal_std != null) {
+          sealDiff = useSeal - Number(row.seal_std);
           if (sealDiff < 0) {
             lines.push(
-              "④ 机封：填列面价低于标配（¥" +
-                money(burgRaw) +
+              "④ 机封：对应机封面价低于标配（¥" +
+                money(useSeal) +
                 " < ¥" +
                 money(row.seal_std) +
                 "），差价按 ¥0 计（请核对表列价）"
@@ -2863,11 +2865,18 @@
             sealDiff = 0;
           } else {
             lines.push(
-              "④ 机封升级（填列面价 − 标配机封面价）= " + money(burgRaw) + " − " + money(row.seal_std) + " = ¥" + money(sealDiff)
+              "④ 机封升级（" +
+                (isFinite(burgRaw) && burgRaw > 0 ? "手填" : "表内对应") +
+                "机封面价 − 标配机封面价）= " +
+                money(useSeal) +
+                " − " +
+                money(row.seal_std) +
+                " = ¥" +
+                money(sealDiff)
             );
           }
         } else {
-          lines.push("④ 机封升级差价 = ¥0（未填博格曼等面价）");
+          lines.push("④ 机封升级差价 = ¥0（未找到表内对应机封价，且未手填）");
         }
 
         var cableAdj = 0;
