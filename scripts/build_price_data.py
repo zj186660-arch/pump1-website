@@ -26,6 +26,14 @@ def to_float(x):
         return None
 
 
+def detect_table_layout(row) -> str:
+    """Detect WQA table layout: 'wide' (20-col, pages 5-9) or 'narrow' (16-col, page 4)."""
+    cells = list(row)
+    if len(cells) >= 18:
+        return "wide"
+    return "narrow"
+
+
 def parse_wqa_tables(doc) -> dict:
     out = {}
     for pi in range(len(doc)):
@@ -42,10 +50,9 @@ def parse_wqa_tables(doc) -> dict:
                 if not re.match(r"^\d{2,3}WQA", model):
                     continue
                 cells = list(row)
-                # Standard WQA economy sheet: face at index 7
+                # face is always at index 7
                 face = to_float(cells[7]) if len(cells) > 7 else None
                 if face is None or face < 500:
-                    # wider sheets: first large number after col 6
                     for i in range(7, min(len(cells), 22)):
                         v = to_float(cells[i])
                         if v and v >= 1000:
@@ -53,17 +60,38 @@ def parse_wqa_tables(doc) -> dict:
                             break
                 if face is None or face < 500:
                     continue
-                rec = {
-                    "face": face,
-                    "impeller_ht200": to_float(cells[8]) if len(cells) > 8 else None,
-                    "impeller_304": to_float(cells[9]) if len(cells) > 9 else None,
-                    "cable_9m": to_float(cells[10]) if len(cells) > 10 else None,
-                    "seal_std": to_float(cells[11]) if len(cells) > 11 else None,
-                    "bearing_std": to_float(cells[12]) if len(cells) > 12 else None,
-                    "bearing_nsk": to_float(cells[13]) if len(cells) > 13 else None,
-                    "bearing_skf": to_float(cells[14]) if len(cells) > 14 else None,
-                    "full_warranty": to_float(cells[15]) if len(cells) > 15 else None,
-                }
+
+                layout = detect_table_layout(row)
+
+                if layout == "wide":
+                    # 20-column table (pages 5-9): columns 11-14 are other seal parts
+                    # col15=seal_std, col16=seal_burg(博格曼), col17=bearing_std, col18=bearing_nsk, col19=bearing_skf
+                    rec = {
+                        "face": face,
+                        "impeller_ht200": to_float(cells[8]) if len(cells) > 8 else None,
+                        "impeller_304": to_float(cells[9]) if len(cells) > 9 else None,
+                        "cable_9m": to_float(cells[10]) if len(cells) > 10 else None,
+                        "seal_std": to_float(cells[15]) if len(cells) > 15 else None,
+                        "seal_burg": to_float(cells[16]) if len(cells) > 16 else None,
+                        "bearing_std": to_float(cells[17]) if len(cells) > 17 else None,
+                        "bearing_nsk": to_float(cells[18]) if len(cells) > 18 else None,
+                        "bearing_skf": to_float(cells[19]) if len(cells) > 19 else None,
+                        "full_warranty": None,
+                    }
+                else:
+                    # 16-column table (page 4): narrow layout
+                    rec = {
+                        "face": face,
+                        "impeller_ht200": to_float(cells[8]) if len(cells) > 8 else None,
+                        "impeller_304": to_float(cells[9]) if len(cells) > 9 else None,
+                        "cable_9m": to_float(cells[10]) if len(cells) > 10 else None,
+                        "seal_std": to_float(cells[11]) if len(cells) > 11 else None,
+                        "seal_burg": None,
+                        "bearing_std": to_float(cells[12]) if len(cells) > 12 else None,
+                        "bearing_nsk": to_float(cells[13]) if len(cells) > 13 else None,
+                        "bearing_skf": to_float(cells[14]) if len(cells) > 14 else None,
+                        "full_warranty": to_float(cells[15]) if len(cells) > 15 else None,
+                    }
                 out[model] = rec
     return out
 

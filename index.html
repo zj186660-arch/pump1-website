@@ -2366,7 +2366,8 @@
             </div>
             <div class="quote-row">
               <span class="label">机封升级</span>
-              <span style="font-size:12px;color:var(--text-muted);max-width:280px;">优先自动读取《价格表》该规格对应机封面价（如博格曼）；也可手填覆盖，系统按「机封面价−标配机封面价」计入。</span>
+              <label><input type="checkbox" id="qBurgOn"> 博格曼机封（差价 = 表列博格曼价 − 标配机封面价）</label>
+              <span id="qBurgPriceDisplay" style="font-size:12px;color:var(--text-muted);"></span>
             </div>
             <div class="quote-row">
               <span class="label">博格曼面价</span>
@@ -2724,7 +2725,8 @@
       var qCoupleDn = document.getElementById("qCoupleDn");
       var qCoupleFace = document.getElementById("qCoupleFace");
       var qCableM = document.getElementById("qCableM");
-      var qBurgFace = document.getElementById("qBurgFace");
+      var qBurgOn = document.getElementById("qBurgOn");
+      var qBurgPriceDisplay = document.getElementById("qBurgPriceDisplay");
       var lastParse = null;
       var lastPriceText = "";
 
@@ -2769,6 +2771,13 @@
         var rowData = getPriceData().wqa[p.tableKey];
         if (rowData) {
           row("表内面价（¥）", String(rowData.face));
+          row("标配机封（¥）", String(rowData.seal_std != null ? rowData.seal_std : "—"));
+          var burgStr = rowData.seal_burg != null ? "¥" + rowData.seal_burg : "—";
+          row("博格曼机封（¥）", burgStr);
+          row("轴承标配（¥）", String(rowData.bearing_std != null ? rowData.bearing_std : "—"));
+          row("NSK 轴承（¥）", String(rowData.bearing_nsk != null ? rowData.bearing_nsk : "—"));
+          row("SKF 轴承（¥）", String(rowData.bearing_skf != null ? rowData.bearing_skf : "—"));
+          row("全保（¥）", String(rowData.full_warranty != null ? rowData.full_warranty : "—"));
           row("表内键", p.tableKey);
         } else {
           row("表内面价", "未找到 — 请手填左侧「面价」");
@@ -2849,32 +2858,20 @@
         }
 
         var sealDiff = 0;
-        var burgRaw = qBurgFace && qBurgFace.value ? Number(qBurgFace.value) : NaN;
-        var autoSeal = row && row.seal_burgmann != null ? Number(row.seal_burgmann) : NaN;
-        var useSeal = isFinite(burgRaw) && burgRaw > 0 ? burgRaw : autoSeal;
-        if (isFinite(useSeal) && useSeal > 0 && row && row.seal_std != null) {
-          sealDiff = useSeal - Number(row.seal_std);
+        var burgOn = qBurgOn && qBurgOn.checked && row && row.seal_burg != null && row.seal_std != null;
+        if (burgOn) {
+          var burgPrice = Number(row.seal_burg);
+          var stdSeal = Number(row.seal_std);
+          sealDiff = burgPrice - stdSeal;
           if (sealDiff < 0) {
-            lines.push(
-              "④ 机封：对应机封面价低于标配（¥" +
-                money(useSeal) +
-                " < ¥" +
-                money(row.seal_std) +
-                "），差价按 ¥0 计（请核对表列价）"
-            );
+            lines.push("④ 机封：表列博格曼价（¥" + money(burgPrice) + "）低于标配（¥" + money(stdSeal) + "），差价按 ¥0 计");
             sealDiff = 0;
           } else {
-            lines.push(
-              "④ 机封升级（" +
-                (isFinite(burgRaw) && burgRaw > 0 ? "手填" : "表内对应") +
-                "机封面价 − 标配机封面价）= " +
-                money(useSeal) +
-                " − " +
-                money(row.seal_std) +
-                " = ¥" +
-                money(sealDiff)
-            );
+            lines.push("④ 博格曼机封差价 = ¥" + money(burgPrice) + " − ¥" + money(stdSeal) + " = ¥" + money(sealDiff));
           }
+        } else {
+          lines.push("④ 机封升级差价 = ¥0（未选博格曼或表中无数据）");
+        }
         } else {
           lines.push("④ 机封升级差价 = ¥0（未找到表内对应机封价，且未手填）");
         }
@@ -2954,6 +2951,13 @@
         var usdAmt = sub / usdR;
         lines.push("÷ " + usdR + "（汇率）→ USD " + money(usdAmt));
 
+        if (qBurgPriceDisplay && row) {
+          if (row.seal_burg != null && row.seal_std != null) {
+            qBurgPriceDisplay.textContent = "表列博格曼 ¥" + money(row.seal_burg) + "，标配 ¥" + money(row.seal_std) + "，差价 ¥" + money(Number(row.seal_burg) - Number(row.seal_std));
+          } else {
+            qBurgPriceDisplay.textContent = "该型号表中无博格曼机封数据";
+          }
+        }
         priceBreakdown.textContent = lines.join("\n");
         priceCny.textContent = "¥ " + money(sub);
         priceDisplay.textContent = "USD " + money(usdAmt);
@@ -3004,7 +3008,7 @@
         "qCoupleMode",
         "qCoupleDn",
         "qCoupleFace",
-        "qBurgFace"
+        "qBurgOn"
       ].forEach(function (id) {
         var el = document.getElementById(id);
         if (!el) return;
